@@ -1,41 +1,26 @@
 import os
-from pathlib import Path
-import pandas as pd
 import ast
 import re
+import zarr
 
+import xarray as xr
 import numpy as np
 import pandas as pd
 
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 
+import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
 import matplotlib.patches as mpatches
+from matplotlib.colors import ListedColormap
 
-import logging
-import math
+from pathlib import Path
+from tqdm import tqdm
 
-import torch
-import torch.nn.functional as F
-from torch.utils.data import DataLoader
-
-import xarray as xr
-import zarr
-
-import numpy as np
 from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_score
 
-from tqdm import tqdm
-import seaborn as sns
-
 # OUTPUT_PATH: str | None = "summary.csv"
-
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 def viz_perf_lines(df_dict, col_x='risk', col_y='f1'):
     """
