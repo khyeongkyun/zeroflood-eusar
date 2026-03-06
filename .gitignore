@@ -9,8 +9,8 @@ pretrained/
 pretrained_models/
 work-dir/
 wandb/
-data/*
-data
+# data/*
+# data
 pretrained_models
 # Scenes for mados tiny
 # Wow gitignore pattern mathcing is a mess
@@ -22,3 +22,7 @@ data/mados/splits/*
 
 .vscode
 .idea
+
+
+# Added ============
+__archive__/

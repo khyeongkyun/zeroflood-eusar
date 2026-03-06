@@ -1,0 +1,665 @@
+[2026-02-04 02:49:49] Data Processing Start! TerraMesh - val
+[2026-02-04 02:49:49] 0/0 samples processed.
+Skipping... majortom_val_0020525 - High 'water not flood': 0.049 > 0.04
+Skipping... majortom_val_0010294 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0020584 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0020666 - High 'water not flood': 0.111 > 0.04
+Skipping... majortom_val_0010435 - Spurious mask exist
+Skipping... majortom_val_0030940 - Low water mask IoU: 0.232 < 0.5
+[2026-02-04 02:50:01] 1/1000 samples processed.
+Skipping... majortom_val_0020766 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0000227 - Low water mask IoU: 0.199 < 0.5
+Skipping... majortom_val_0031041 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0020860 - Low water mask IoU: 0.053 < 0.5
+Skipping... majortom_val_0020886 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0020892 - Low water mask IoU: 0.387 < 0.5
+Skipping... majortom_val_0010706 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0031215 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:50:11] 3/2000 samples processed.
+Skipping... majortom_val_0031309 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0021138 - Low water mask IoU: 0.312 < 0.5
+Skipping... majortom_val_0010901 - Spurious mask exist
+Skipping... majortom_val_0000581 - Low water mask IoU: 0.014 < 0.5
+[2026-02-04 02:50:21] 5/3000 samples processed.
+Skipping... majortom_val_0031543 - Low water mask IoU: 0.496 < 0.5
+Skipping... majortom_val_0021317 - Low water mask IoU: 0.475 < 0.5
+Skipping... majortom_val_0011082 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0031587 - Low water mask IoU: 0.468 < 0.5
+Skipping... majortom_val_0021372 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0000733 - High 'water not flood': 0.058 > 0.04
+Skipping... majortom_val_0011213 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:50:32] 6/4000 samples processed.
+Skipping... majortom_val_0021499 - Low water mask IoU: 0.010 < 0.5
+Skipping... majortom_val_0021500 - High 'water not flood': 0.049 > 0.04
+Skipping... majortom_val_0031767 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0031871 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0031895 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:50:42] 6/5000 samples processed.
+Skipping... majortom_val_0000993 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0021757 - Low water mask IoU: 0.393 < 0.5
+Skipping... majortom_val_0001045 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0021809 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0011582 - Spurious mask exist
+Skipping... majortom_val_0001155 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0032190 - Low water mask IoU: 0.421 < 0.5
+Skipping... majortom_val_0011726 - High 'water not flood': 0.056 > 0.04
+[2026-02-04 02:50:52] 8/6000 samples processed.
+Skipping... majortom_val_0022079 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0032359 - High 'water not flood': 0.060 > 0.04
+Skipping... majortom_val_0022128 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0032391 - High 'water not flood': 0.051 > 0.04
+Skipping... majortom_val_0011947 - Low water mask IoU: 0.025 < 0.5
+[2026-02-04 02:51:02] 12/7000 samples processed.
+Skipping... majortom_val_0012017 - High 'water not flood': 0.053 > 0.04
+Skipping... majortom_val_0012018 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0001446 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0032585 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0022396 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0001518 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:51:12] 14/8000 samples processed.
+Skipping... majortom_val_0032784 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0032829 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0022624 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0001732 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0001752 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:51:22] 15/9000 samples processed.
+Skipping... majortom_val_0012503 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0012529 - Low water mask IoU: 0.028 < 0.5
+Skipping... majortom_val_0012606 - Low water mask IoU: 0.025 < 0.5
+[2026-02-04 02:51:33] 20/10000 samples processed.
+Skipping... majortom_val_0002027 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0023054 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0012829 - High 'water not flood': 0.048 > 0.04
+Skipping... majortom_val_0012861 - Low water mask IoU: 0.326 < 0.5
+Skipping... majortom_val_0012900 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0012967 - Low water mask IoU: 0.065 < 0.5
+Skipping... majortom_val_0012981 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0002169 - High 'water not flood': 0.052 > 0.04
+Skipping... majortom_val_0002174 - High 'water not flood': 0.051 > 0.04
+[2026-02-04 02:51:43] 25/11000 samples processed.
+Skipping... majortom_val_0023238 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0023274 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0033578 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0013168 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0023450 - Spurious mask exist
+Skipping... majortom_val_0033701 - High 'water not flood': 0.096 > 0.04
+Skipping... majortom_val_0033704 - Low water mask IoU: 0.336 < 0.5
+Skipping... majortom_val_0023477 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:51:54] 30/12000 samples processed.
+Skipping... majortom_val_0023495 - Low water mask IoU: 0.040 < 0.5
+Skipping... majortom_val_0002395 - Low water mask IoU: 0.028 < 0.5
+Skipping... majortom_val_0033883 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0023666 - Low water mask IoU: 0.492 < 0.5
+Skipping... majortom_val_0002540 - Low water mask IoU: 0.241 < 0.5
+[2026-02-04 02:52:04] 31/13000 samples processed.
+Skipping... majortom_val_0013545 - Low water mask IoU: 0.118 < 0.5
+Skipping... majortom_val_0023848 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0023887 - Low water mask IoU: 0.220 < 0.5
+[2026-02-04 02:52:14] 32/14000 samples processed.
+Skipping... majortom_val_0023993 - Low water mask IoU: 0.153 < 0.5
+Skipping... majortom_val_0013878 - Spurious mask exist
+Skipping... majortom_val_0034358 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0024154 - Low water mask IoU: 0.067 < 0.5
+Skipping... majortom_val_0013921 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0024162 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0034425 - High 'water not flood': 0.089 > 0.04
+[2026-02-04 02:52:24] 32/15000 samples processed.
+Skipping... majortom_val_0024267 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0034520 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0034642 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0014205 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:52:34] 35/16000 samples processed.
+Skipping... majortom_val_0003240 - Low water mask IoU: 0.327 < 0.5
+Skipping... majortom_val_0024577 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0024579 - Low water mask IoU: 0.199 < 0.5
+Skipping... majortom_val_0034876 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0034887 - High 'water not flood': 0.064 > 0.04
+Skipping... majortom_val_0003317 - High 'water not flood': 0.081 > 0.04
+[2026-02-04 02:52:44] 36/17000 samples processed.
+Skipping... majortom_val_0014514 - Low water mask IoU: 0.463 < 0.5
+Skipping... majortom_val_0035073 - Low water mask IoU: 0.440 < 0.5
+Skipping... majortom_val_0003514 - Spurious mask exist
+Skipping... majortom_val_0014729 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:52:54] 43/18000 samples processed.
+Skipping... majortom_val_0025002 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0025021 - Low water mask IoU: 0.324 < 0.5
+Skipping... majortom_val_0014805 - Low water mask IoU: 0.004 < 0.5
+Skipping... majortom_val_0014821 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0035378 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0025153 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0014923 - Low water mask IoU: 0.289 < 0.5
+Skipping... majortom_val_0025181 - Low water mask IoU: 0.339 < 0.5
+Skipping... majortom_val_0014952 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:53:05] 48/19000 samples processed.
+Skipping... majortom_val_0025296 - Low water mask IoU: 0.255 < 0.5
+Skipping... majortom_val_0035565 - High 'water not flood': 0.056 > 0.04
+Skipping... majortom_val_0015092 - High 'water not flood': 0.041 > 0.04
+Skipping... majortom_val_0035596 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0015141 - Low water mask IoU: 0.416 < 0.5
+Skipping... majortom_val_0025394 - High 'water not flood': 0.057 > 0.04
+Skipping... majortom_val_0003920 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:53:14] 50/20000 samples processed.
+Skipping... majortom_val_0025607 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0015391 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:53:24] 54/21000 samples processed.
+Skipping... majortom_val_0035972 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0015496 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0025752 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0004272 - Low water mask IoU: 0.310 < 0.5
+Skipping... majortom_val_0025960 - High 'water not flood': 0.072 > 0.04
+[2026-02-04 02:53:34] 54/22000 samples processed.
+Skipping... majortom_val_0004455 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0036415 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0015945 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:53:44] 55/23000 samples processed.
+Skipping... majortom_val_0026244 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026249 - High 'water not flood': 0.087 > 0.04
+Skipping... majortom_val_0026255 - Low water mask IoU: 0.498 < 0.5
+Skipping... majortom_val_0036533 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026332 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0016108 - Low water mask IoU: 0.162 < 0.5
+Skipping... majortom_val_0026355 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0036600 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026362 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0004659 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0036609 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0016148 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026413 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0036654 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026433 - Low water mask IoU: 0.376 < 0.5
+Skipping... majortom_val_0036701 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:53:55] 60/24000 samples processed.
+Skipping... majortom_val_0036749 - Low water mask IoU: 0.243 < 0.5
+Skipping... majortom_val_0004792 - Low water mask IoU: 0.152 < 0.5
+Skipping... majortom_val_0026545 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0004837 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0036835 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0026617 - Low water mask IoU: 0.047 < 0.5
+[2026-02-04 02:54:05] 62/25000 samples processed.
+Skipping... majortom_val_0004983 - High 'water not flood': 0.076 > 0.04
+Skipping... majortom_val_0016576 - High 'water not flood': 0.042 > 0.04
+Skipping... majortom_val_0037123 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0005082 - Low water mask IoU: 0.245 < 0.5
+Skipping... majortom_val_0037145 - Spurious mask exist
+Skipping... majortom_val_0026939 - Low water mask IoU: 0.228 < 0.5
+Skipping... majortom_val_0016721 - Low water mask IoU: 0.022 < 0.5
+Skipping... majortom_val_0037217 - Low water mask IoU: 0.356 < 0.5
+[2026-02-04 02:54:16] 65/26000 samples processed.
+Skipping... majortom_val_0016746 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0037233 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0016770 - High 'water not flood': 0.108 > 0.04
+Skipping... majortom_val_0016792 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0005201 - Spurious mask exist
+Skipping... majortom_val_0037281 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0037333 - High 'water not flood': 0.047 > 0.04
+Skipping... majortom_val_0005316 - Low water mask IoU: 0.490 < 0.5
+[2026-02-04 02:54:26] 66/27000 samples processed.
+Skipping... majortom_val_0005368 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0027290 - Spurious mask exist
+Skipping... majortom_val_0005417 - Low water mask IoU: 0.469 < 0.5
+Skipping... majortom_val_0037552 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0037567 - Low water mask IoU: 0.487 < 0.5
+Skipping... majortom_val_0037638 - High 'water not flood': 0.043 > 0.04
+Skipping... majortom_val_0037642 - Low water mask IoU: 0.250 < 0.5
+Skipping... majortom_val_0037663 - High 'water not flood': 0.050 > 0.04
+[2026-02-04 02:54:37] 69/28000 samples processed.
+Skipping... majortom_val_0005563 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0037749 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0005598 - Spurious mask exist
+Skipping... majortom_val_0017413 - High 'water not flood': 0.056 > 0.04
+Skipping... majortom_val_0037906 - Low water mask IoU: 0.457 < 0.5
+Skipping... majortom_val_0017438 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0027714 - Low water mask IoU: 0.368 < 0.5
+Skipping... majortom_val_0027730 - Spurious mask exist
+[2026-02-04 02:54:47] 71/29000 samples processed.
+Skipping... majortom_val_0017496 - High 'water not flood': 0.060 > 0.04
+Skipping... majortom_val_0027786 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0017561 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0027852 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0038111 - Low water mask IoU: 0.088 < 0.5
+Skipping... majortom_val_0005875 - Low water mask IoU: 0.255 < 0.5
+Skipping... majortom_val_0017633 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0017651 - Low water mask IoU: 0.384 < 0.5
+Skipping... majortom_val_0017670 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0017714 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0017727 - Spurious mask exist
+[2026-02-04 02:54:57] 75/30000 samples processed.
+Skipping... majortom_val_0017746 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0028047 - Low water mask IoU: 0.412 < 0.5
+Skipping... majortom_val_0006012 - Low water mask IoU: 0.002 < 0.5
+Skipping... majortom_val_0028187 - High 'water not flood': 0.048 > 0.04
+Skipping... majortom_val_0006141 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0028228 - # Flooded pixels: 0.01 < 0.01 
+[2026-02-04 02:55:08] 78/31000 samples processed.
+Skipping... majortom_val_0038473 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0028244 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0006166 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0028257 - Low water mask IoU: 0.311 < 0.5
+Skipping... majortom_val_0038517 - High 'water not flood': 0.044 > 0.04
+Skipping... majortom_val_0038554 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0038555 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0038583 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0018137 - Low water mask IoU: 0.313 < 0.5
+Skipping... majortom_val_0038640 - Spurious mask exist
+Skipping... majortom_val_0038643 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0006300 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0028472 - Low water mask IoU: 0.044 < 0.5
+Skipping... majortom_val_0006357 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:55:18] 81/32000 samples processed.
+Skipping... majortom_val_0038722 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0006387 - High 'water not flood': 0.052 > 0.04
+Skipping... majortom_val_0006394 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0018323 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0006423 - High 'water not flood': 0.046 > 0.04
+Skipping... majortom_val_0018389 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0018467 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0038957 - Low water mask IoU: 0.015 < 0.5
+[2026-02-04 02:55:29] 83/33000 samples processed.
+Skipping... majortom_val_0006610 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0039061 - Spurious mask exist
+Skipping... majortom_val_0006645 - High 'water not flood': 0.047 > 0.04
+Skipping... majortom_val_0018611 - Low water mask IoU: 0.021 < 0.5
+Skipping... majortom_val_0018700 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0039181 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0039218 - Low water mask IoU: 0.010 < 0.5
+[2026-02-04 02:55:39] 84/34000 samples processed.
+Skipping... majortom_val_0018775 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0029066 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0029142 - Low water mask IoU: 0.314 < 0.5
+Skipping... majortom_val_0018920 - Low water mask IoU: 0.233 < 0.5
+Skipping... majortom_val_0029196 - High 'water not flood': 0.075 > 0.04
+[2026-02-04 02:55:49] 86/35000 samples processed.
+Skipping... majortom_val_0007003 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0039547 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0007019 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:55:59] 88/36000 samples processed.
+Skipping... majortom_val_0039774 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0039894 - Low water mask IoU: 0.474 < 0.5
+Skipping... majortom_val_0039907 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:56:08] 88/37000 samples processed.
+Skipping... majortom_val_0029761 - Low water mask IoU: 0.377 < 0.5
+Skipping... majortom_val_0029824 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0029833 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:56:19] 92/38000 samples processed.
+Skipping... majortom_val_0007578 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0030061 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0040310 - High 'water not flood': 0.057 > 0.04
+Skipping... majortom_val_0040368 - Low water mask IoU: 0.249 < 0.5
+Skipping... majortom_val_0019936 - Low water mask IoU: 0.037 < 0.5
+Skipping... majortom_val_0007727 - High 'water not flood': 0.074 > 0.04
+[2026-02-04 02:56:29] 94/39000 samples processed.
+Skipping... majortom_val_0007794 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0007801 - Low water mask IoU: 0.424 < 0.5
+Skipping... majortom_val_0020043 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0040533 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0030303 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0030374 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0040688 - High 'water not flood': 0.088 > 0.04
+[2026-02-04 02:56:40] 98/40000 samples processed.
+Skipping... majortom_val_0030595 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0030622 - Low water mask IoU: 0.010 < 0.5
+Skipping... majortom_val_0008080 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0020391 - Low water mask IoU: 0.484 < 0.5
+Skipping... majortom_val_0030676 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0040916 - High 'water not flood': 0.047 > 0.04
+Skipping... majortom_val_0020448 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0061442 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:56:50] 100/41000 samples processed.
+Skipping... majortom_val_0061484 - High 'water not flood': 0.045 > 0.04
+Skipping... majortom_val_0008216 - Low water mask IoU: 0.005 < 0.5
+Skipping... majortom_val_0051334 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0051349 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0051363 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0071914 - High 'water not flood': 0.104 > 0.04
+[2026-02-04 02:57:00] 103/42000 samples processed.
+Skipping... majortom_val_0051483 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0008391 - Low water mask IoU: 0.468 < 0.5
+Skipping... majortom_val_0008410 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0051545 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0061820 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0072093 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0072101 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0008509 - Spurious mask exist
+Skipping... majortom_val_0061894 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0072189 - Low water mask IoU: 0.294 < 0.5
+[2026-02-04 02:57:10] 106/43000 samples processed.
+Skipping... majortom_val_0062000 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0008633 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0072334 - Spurious mask exist
+Skipping... majortom_val_0062103 - Low water mask IoU: 0.392 < 0.5
+Skipping... majortom_val_0008752 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0062190 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0008774 - High 'water not flood': 0.051 > 0.04
+[2026-02-04 02:57:20] 109/44000 samples processed.
+Skipping... majortom_val_0072448 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0072471 - Spurious mask exist
+Skipping... majortom_val_0072473 - High 'water not flood': 0.055 > 0.04
+Skipping... majortom_val_0062253 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0008850 - High 'water not flood': 0.065 > 0.04
+Skipping... majortom_val_0008903 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0052144 - Low water mask IoU: 0.388 < 0.5
+Skipping... majortom_val_0072662 - Low water mask IoU: 0.489 < 0.5
+[2026-02-04 02:57:31] 115/45000 samples processed.
+Skipping... majortom_val_0072695 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0072904 - High 'water not flood': 0.044 > 0.04
+[2026-02-04 02:57:40] 116/46000 samples processed.
+Skipping... majortom_val_0062741 - High 'water not flood': 0.048 > 0.04
+Skipping... majortom_val_0052551 - High 'water not flood': 0.058 > 0.04
+Skipping... majortom_val_0073050 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0062854 - Low water mask IoU: 0.280 < 0.5
+Skipping... majortom_val_0009301 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0073157 - Low water mask IoU: 0.454 < 0.5
+Skipping... majortom_val_0062933 - Low water mask IoU: 0.498 < 0.5
+[2026-02-04 02:57:51] 119/47000 samples processed.
+Skipping... majortom_val_0063070 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0052867 - High 'water not flood': 0.052 > 0.04
+Skipping... majortom_val_0052902 - Low water mask IoU: 0.171 < 0.5
+Skipping... majortom_val_0009530 - Low water mask IoU: 0.409 < 0.5
+Skipping... majortom_val_0073390 - Low water mask IoU: 0.009 < 0.5
+[2026-02-04 02:58:01] 122/48000 samples processed.
+Skipping... majortom_val_0052972 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0053021 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063266 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0053039 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0073556 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0073570 - Spurious mask exist
+Skipping... majortom_val_0053111 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0053128 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063390 - Low water mask IoU: 0.045 < 0.5
+Skipping... majortom_val_0073643 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0009772 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063448 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:58:11] 126/49000 samples processed.
+Skipping... majortom_val_0053216 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0073701 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0073702 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063484 - Low water mask IoU: 0.203 < 0.5
+Skipping... majortom_val_0009832 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0053291 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0009868 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063594 - Low water mask IoU: 0.004 < 0.5
+Skipping... majortom_val_0009905 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 02:58:22] 132/50000 samples processed.
+Skipping... majortom_val_0063734 - High 'water not flood': 0.078 > 0.04
+Skipping... majortom_val_0063736 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0073976 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063768 - Low water mask IoU: 0.345 < 0.5
+Skipping... majortom_val_0053646 - Low water mask IoU: 0.448 < 0.5
+Skipping... majortom_val_0010174 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0063947 - Low water mask IoU: 0.282 < 0.5
+[2026-02-04 02:58:32] 135/51000 samples processed.
+Skipping... majortom_val_0063979 - Low water mask IoU: 0.371 < 0.5
+Skipping... majortom_val_0064074 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0064116 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0064117 - High 'water not flood': 0.083 > 0.04
+Skipping... majortom_val_0053882 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0053912 - Spurious mask exist
+Skipping... majortom_val_0064180 - Low water mask IoU: 0.403 < 0.5
+Skipping... majortom_val_0074424 - High 'water not flood': 0.041 > 0.04
+[2026-02-04 02:58:42] 135/52000 samples processed.
+Skipping... majortom_val_0074441 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0074475 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0074498 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0074539 - Low water mask IoU: 0.457 < 0.5
+Skipping... majortom_val_0074541 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0064319 - Low water mask IoU: 0.269 < 0.5
+Skipping... majortom_val_0054210 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:58:52] 136/53000 samples processed.
+Skipping... majortom_val_0064468 - Low water mask IoU: 0.214 < 0.5
+Skipping... majortom_val_0074743 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0054287 - Low water mask IoU: 0.469 < 0.5
+Skipping... majortom_val_0074767 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0041369 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0054396 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0054417 - High 'water not flood': 0.044 > 0.04
+[2026-02-04 02:59:03] 138/54000 samples processed.
+Skipping... majortom_val_0054521 - High 'water not flood': 0.051 > 0.04
+Skipping... majortom_val_0064851 - Spurious mask exist
+Skipping... majortom_val_0041652 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:59:13] 143/55000 samples processed.
+Skipping... majortom_val_0041713 - High 'water not flood': 0.052 > 0.04
+Skipping... majortom_val_0075271 - Low water mask IoU: 0.013 < 0.5
+Skipping... majortom_val_0075305 - Low water mask IoU: 0.240 < 0.5
+Skipping... majortom_val_0054828 - Spurious mask exist
+Skipping... majortom_val_0065149 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:59:23] 143/56000 samples processed.
+Skipping... majortom_val_0075445 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0041907 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0075463 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0065258 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0075502 - Low water mask IoU: 0.010 < 0.5
+Skipping... majortom_val_0075518 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0065373 - High 'water not flood': 0.064 > 0.04
+Skipping... majortom_val_0055143 - High 'water not flood': 0.086 > 0.04
+Skipping... majortom_val_0075629 - Low water mask IoU: 0.469 < 0.5
+Skipping... majortom_val_0065398 - Low water mask IoU: 0.266 < 0.5
+[2026-02-04 02:59:33] 145/57000 samples processed.
+[2026-02-04 02:59:43] 149/58000 samples processed.
+Skipping... majortom_val_0075979 - High 'water not flood': 0.041 > 0.04
+Skipping... majortom_val_0065750 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0065751 - Low water mask IoU: 0.362 < 0.5
+Skipping... majortom_val_0075998 - High 'water not flood': 0.041 > 0.04
+Skipping... majortom_val_0055600 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0055671 - Spurious mask exist
+Skipping... majortom_val_0042467 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 02:59:54] 154/59000 samples processed.
+Skipping... majortom_val_0065966 - High 'water not flood': 0.064 > 0.04
+Skipping... majortom_val_0055740 - Low water mask IoU: 0.462 < 0.5
+Skipping... majortom_val_0055786 - Low water mask IoU: 0.380 < 0.5
+Skipping... majortom_val_0076278 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0055807 - Low water mask IoU: 0.483 < 0.5
+Skipping... majortom_val_0066075 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0076369 - High 'water not flood': 0.085 > 0.04
+Skipping... majortom_val_0055953 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0042687 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:00:04] 156/60000 samples processed.
+Skipping... majortom_val_0066205 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0076504 - Low water mask IoU: 0.345 < 0.5
+Skipping... majortom_val_0076555 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0066319 - Low water mask IoU: 0.215 < 0.5
+Skipping... majortom_val_0066355 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0076606 - Low water mask IoU: 0.447 < 0.5
+Skipping... majortom_val_0076672 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0042882 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:00:14] 158/61000 samples processed.
+Skipping... majortom_val_0042890 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0066555 - Low water mask IoU: 0.297 < 0.5
+Skipping... majortom_val_0066560 - Low water mask IoU: 0.456 < 0.5
+Skipping... majortom_val_0076820 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0056406 - Low water mask IoU: 0.441 < 0.5
+Skipping... majortom_val_0066669 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0056446 - Low water mask IoU: 0.002 < 0.5
+[2026-02-04 03:00:24] 159/62000 samples processed.
+Skipping... majortom_val_0043167 - Low water mask IoU: 0.332 < 0.5
+Skipping... majortom_val_0066802 - High 'water not flood': 0.046 > 0.04
+Skipping... majortom_val_0043169 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0077067 - High 'water not flood': 0.053 > 0.04
+Skipping... majortom_val_0077150 - Low water mask IoU: 0.033 < 0.5
+Skipping... majortom_val_0056672 - Low water mask IoU: 0.003 < 0.5
+Skipping... majortom_val_0056678 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:00:34] 162/63000 samples processed.
+Skipping... majortom_val_0066954 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0066963 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0043325 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0067080 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0043408 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0077364 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0067127 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0067132 - High 'water not flood': 0.046 > 0.04
+Skipping... majortom_val_0067154 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 03:00:44] 165/64000 samples processed.
+Skipping... majortom_val_0043547 - High 'water not flood': 0.061 > 0.04
+Skipping... majortom_val_0043563 - Low water mask IoU: 0.397 < 0.5
+Skipping... majortom_val_0077562 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0057090 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0043587 - Low water mask IoU: 0.285 < 0.5
+Skipping... majortom_val_0077646 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:00:54] 167/65000 samples processed.
+Skipping... majortom_val_0057217 - High 'water not flood': 0.040 > 0.04
+Skipping... majortom_val_0067469 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0043725 - Low water mask IoU: 0.291 < 0.5
+Skipping... majortom_val_0057270 - High 'water not flood': 0.053 > 0.04
+Skipping... majortom_val_0043736 - Low water mask IoU: 0.492 < 0.5
+Skipping... majortom_val_0043829 - High 'water not flood': 0.088 > 0.04
+Skipping... majortom_val_0067660 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0077913 - Low water mask IoU: 0.461 < 0.5
+Skipping... majortom_val_0057453 - Low water mask IoU: 0.356 < 0.5
+[2026-02-04 03:01:04] 168/66000 samples processed.
+Skipping... majortom_val_0067797 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0067835 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0043999 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0044008 - Low water mask IoU: 0.117 < 0.5
+Skipping... majortom_val_0067921 - High 'water not flood': 0.049 > 0.04
+Skipping... majortom_val_0078166 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0067950 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:01:14] 171/67000 samples processed.
+Skipping... majortom_val_0044128 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0078263 - High 'water not flood': 0.069 > 0.04
+Skipping... majortom_val_0068032 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0057814 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0057816 - Low water mask IoU: 0.358 < 0.5
+Skipping... majortom_val_0057833 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068073 - High 'water not flood': 0.045 > 0.04
+Skipping... majortom_val_0068091 - High 'water not flood': 0.085 > 0.04
+Skipping... majortom_val_0044210 - Low water mask IoU: 0.006 < 0.5
+Skipping... majortom_val_0057953 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068198 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 03:01:24] 173/68000 samples processed.
+Skipping... majortom_val_0078458 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0078591 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068357 - Low water mask IoU: 0.183 < 0.5
+Skipping... majortom_val_0078606 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0058199 - Low water mask IoU: 0.497 < 0.5
+[2026-02-04 03:01:34] 175/69000 samples processed.
+Skipping... majortom_val_0068477 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068511 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0078771 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068564 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0058375 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:01:45] 178/70000 samples processed.
+Skipping... majortom_val_0078994 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068758 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0058573 - Low water mask IoU: 0.421 < 0.5
+Skipping... majortom_val_0058578 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0068926 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 03:01:55] 181/71000 samples processed.
+Skipping... majortom_val_0079198 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0058743 - High 'water not flood': 0.054 > 0.04
+Skipping... majortom_val_0069082 - Low water mask IoU: 0.006 < 0.5
+Skipping... majortom_val_0079350 - Low water mask IoU: 0.087 < 0.5
+Skipping... majortom_val_0079389 - Low water mask IoU: 0.387 < 0.5
+[2026-02-04 03:02:05] 184/72000 samples processed.
+Skipping... majortom_val_0045074 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0058981 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0079552 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0045180 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0045190 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0059107 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0059136 - High 'water not flood': 0.047 > 0.04
+Skipping... majortom_val_0079664 - Low water mask IoU: 0.395 < 0.5
+[2026-02-04 03:02:16] 187/73000 samples processed.
+Skipping... majortom_val_0059340 - Low water mask IoU: 0.067 < 0.5
+Skipping... majortom_val_0059344 - Low water mask IoU: 0.471 < 0.5
+Skipping... majortom_val_0059367 - High 'water not flood': 0.045 > 0.04
+Skipping... majortom_val_0079849 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0079852 - High 'water not flood': 0.041 > 0.04
+Skipping... majortom_val_0045437 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0069691 - High 'water not flood': 0.067 > 0.04
+[2026-02-04 03:02:26] 188/74000 samples processed.
+Skipping... majortom_val_0079954 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0045507 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0069787 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0069790 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0080057 - Low water mask IoU: 0.370 < 0.5
+Skipping... majortom_val_0045575 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0059602 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0080086 - High 'water not flood': 0.056 > 0.04
+Skipping... majortom_val_0069858 - Low water mask IoU: 0.024 < 0.5
+Skipping... majortom_val_0080106 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0045678 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0069946 - # Flooded pixels: 0.01 < 0.01 
+[2026-02-04 03:02:36] 194/75000 samples processed.
+Skipping... majortom_val_0080201 - Low water mask IoU: 0.447 < 0.5
+Skipping... majortom_val_0059781 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070107 - Low water mask IoU: 0.456 < 0.5
+Skipping... majortom_val_0070176 - Low water mask IoU: 0.045 < 0.5
+Skipping... majortom_val_0070185 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070193 - Low water mask IoU: 0.162 < 0.5
+[2026-02-04 03:02:48] 198/76000 samples processed.
+Skipping... majortom_val_0060014 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070269 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070336 - Low water mask IoU: 0.194 < 0.5
+Skipping... majortom_val_0046007 - Low water mask IoU: 0.375 < 0.5
+Skipping... majortom_val_0060203 - Low water mask IoU: 0.286 < 0.5
+Skipping... majortom_val_0046115 - Low water mask IoU: 0.380 < 0.5
+Skipping... majortom_val_0060260 - Low water mask IoU: 0.124 < 0.5
+Skipping... majortom_val_0046159 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 03:03:06] 204/77000 samples processed.
+Skipping... majortom_val_0046181 - Low water mask IoU: 0.033 < 0.5
+Skipping... majortom_val_0046219 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0046224 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0060425 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0060474 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070723 - Low water mask IoU: 0.327 < 0.5
+Skipping... majortom_val_0060488 - Low water mask IoU: 0.379 < 0.5
+Skipping... majortom_val_0060501 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0070776 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0060581 - Low water mask IoU: 0.111 < 0.5
+Skipping... majortom_val_0060607 - Low water mask IoU: 0.000 < 0.5
+[2026-02-04 03:03:24] 206/78000 samples processed.
+Skipping... majortom_val_0060647 - Low water mask IoU: 0.000 < 0.5
+Skipping... majortom_val_0060682 - Low water mask IoU: 0.162 < 0.5
+Skipping... majortom_val_0060834 - High 'water not flood': 0.062 > 0.04
+Skipping... majortom_val_0060842 - Low water mask IoU: 0.439 < 0.5
+Skipping... majortom_val_0071100 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:03:41] 207/79000 samples processed.
+Skipping... majortom_val_0061038 - # Flooded pixels: 0.01 < 0.01 
+Skipping... majortom_val_0071345 - Low water mask IoU: 0.001 < 0.5
+Skipping... majortom_val_0046812 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0046838 - Low water mask IoU: 0.494 < 0.5
+Skipping... majortom_val_0071397 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0061165 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0061188 - Low water mask IoU: 0.242 < 0.5
+Skipping... majortom_val_0046923 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0061268 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0046953 - High 'water not flood': 0.066 > 0.04
+[2026-02-04 03:03:59] 211/80000 samples processed.
+Skipping... majortom_val_0061359 - High 'water not flood': 0.044 > 0.04
+Skipping... majortom_val_0071618 - High 'water not flood': 0.061 > 0.04
+Skipping... majortom_val_0047159 - Low water mask IoU: 0.086 < 0.5
+Skipping... majortom_val_0047341 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0047504 - Low water mask IoU: 0.290 < 0.5
+[2026-02-04 03:04:18] 212/81000 samples processed.
+Skipping... majortom_val_0047727 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0048179 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0048204 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0048261 - Low water mask IoU: 0.085 < 0.5
+Skipping... majortom_val_0048272 - Low water mask IoU: 0.102 < 0.5
+Skipping... majortom_val_0048284 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0048312 - Low water mask IoU: 0.272 < 0.5
+[2026-02-04 03:04:39] 214/82000 samples processed.
+Skipping... majortom_val_0048441 - Spurious mask exist
+Skipping... majortom_val_0048680 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0048710 - High 'water not flood': 0.046 > 0.04
+Skipping... majortom_val_0048740 - High 'water not flood': 0.067 > 0.04
+Skipping... majortom_val_0048754 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:04:59] 217/83000 samples processed.
+Skipping... majortom_val_0049382 - Low water mask IoU: 0.027 < 0.5
+Skipping... majortom_val_0049457 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0049674 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0049793 - Low water mask IoU: 0.075 < 0.5
+[2026-02-04 03:05:19] 219/84000 samples processed.
+Skipping... majortom_val_0049963 - Low water mask IoU: 0.240 < 0.5
+Skipping... majortom_val_0050028 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0050169 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0050215 - Low water mask IoU: 0.138 < 0.5
+Skipping... majortom_val_0050548 - # Flooded pixels: 0.00 < 0.01 
+Skipping... majortom_val_0050565 - High 'water not flood': 0.064 > 0.04
+Skipping... majortom_val_0050596 - # Flooded pixels: 0.00 < 0.01 
+[2026-02-04 03:05:39] 223/85000 samples processed.
+Skipping... majortom_val_0050912 - Low water mask IoU: 0.455 < 0.5
+[2026-02-04 03:05:57] 226/86000 samples processed.
+[2026-02-04 03:06:15] 226/87000 samples processed.
+[2026-02-04 03:06:32] 226/88000 samples processed.
+[2026-02-04 03:06:50] 226/89000 samples processed.
+[2026-02-04 03:06:52] 226/89087 DONE!

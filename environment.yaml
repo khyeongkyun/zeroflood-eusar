@@ -1,29 +1,46 @@
-name: pangaea-bench
+# EDITTED: Clean-up to resolve the dependancy issue (+ albumentataions for GFM: TerraMind)
+
+name: zeroflood-eusar
+
 channels:
+  - conda-forge
   - pytorch
   - nvidia
-  - conda-forge
-  - nodefaults
+channel_priority: strict
+
 dependencies:
-  - python=3.10
-  - geopandas
-  - numpy>=2.0
+  # Core
+  - python>=3.10
+  - numpy
   - pillow
-  - pytorch>=2.1
-  - rasterio
-  - scikit-learn
-  - tensorboard
-  - torchaudio
-  - torchvision
   - tqdm
   - tifffile
+
+  # PyTorch
+  - pytorch
+  - torchvision
+  - torchaudio
+  # - pytorch-cuda=11.8
+
+  # Geo / raster
+  - geopandas
+  - rasterio
+  - rioxarray
+  - zarr
+  - cartopy
+
+  # Vision / ML
+  - albumentations
+  - opencv
+  - scikit-learn
   - timm
   - einops
-  - rioxarray
-  - pytorch-cuda=11.8
+  - tensorboard
+  - diffusers
+
+  # Utilities
   - gdown
   - ptflops
-  - fastai::opencv-python-headless
   - google-cloud-storage
   - omegaconf
   - pydataverse
@@ -31,4 +48,3 @@ dependencies:
   - yacs
   - wandb
   - hydra-core
-
