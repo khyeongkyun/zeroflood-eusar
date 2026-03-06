@@ -27,18 +27,83 @@ import zarr
 import numpy as np
 from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_score
 
+from tqdm import tqdm
+import seaborn as sns
+
 # OUTPUT_PATH: str | None = "summary.csv"
 
-def viz_perf_heatmap(test_df: pd.DataFrame, col_x='risk', col_y='f1'):
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots(figsize=(3,3))
-    h = ax.hist2d(test_df[col_x], test_df[col_y], bins=20, cmap='magma')
+def viz_perf_lines(df_dict, col_x='risk', col_y='f1'):
+    """
+    df_dict: dict of {'ModelName': df}
+    """
+    bins = np.linspace(0, 1, 11)
+    # Using bin centers for more accurate x-axis positioning in a line plot
+    bin_centers = (bins[:-1] + bins[1:]) / 2
+    
+    plt.figure(figsize=(6, 5))
+    
+    for name, df in df_dict.items():
+        # Group by bins and calculate the mean for each bin
+        binned_means = df.groupby(pd.cut(df[col_x], bins=bins), observed=False)[col_y].mean()
+        
+        # Plot the mean values against the bin centers
+        plt.plot(bin_centers, binned_means.values, marker='o', label=name, linewidth=2)
 
-    # fig.colorbar(h[3], ax=ax, label='Count', fraction=0.1, pad=0.05)
+    plt.ylim(0.2, 1)
+    plt.xlim(0, 1)
+    plt.xlabel(f'Bins of {col_x}')
+    plt.ylabel(f'Mean {col_y}')
+    plt.title(f'Mean {col_y} across {col_x} Bins')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.grid(True, linestyle='--', alpha=0.6)
+    
+    plt.tight_layout()
+    plt.show()
+
+def viz_perf_distr_multi(df_dict, col_x='risk', col_y='f1', ylim=(0,1)):
+    """
+    df_dict: dict of {'ModelName': df}
+    """
+    combined_list = []
+    bins = np.linspace(0, 1, 11)
+    labels = [f"{b:.1f}" for b in bins[1:]]
+
+    custom_palette = {}
+    for name, (df, color) in df_dict.items():
+        custom_palette[name] = color
+        temp = df[[col_x, col_y]].copy()
+        temp['x_bins'] = pd.cut(temp[col_x], bins=bins, labels=labels)
+        temp['Source'] = name
+        combined_list.append(temp)
+
+    # Merge all into one dataframe
+    plot_df = pd.concat(combined_list)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    sns.boxplot(
+        data=plot_df, 
+        x='x_bins', 
+        y=col_y, 
+        hue='Source',
+        whis=0,
+        showfliers=False,
+        ax=ax,
+        palette=custom_palette,
+        gap=0.2
+    )
+
+    ax.set_ylim(ylim[0],ylim[1])
     ax.set_xlabel(col_x)
     ax.set_ylabel(col_y)
-    ax.set_title('Sample counts')
-
+    ax.grid(True, linestyle='--', alpha=0.6)
+    ax.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
+    
+    plt.tight_layout()
     plt.show()
 
 def get_sample_keys_auto(test_df: pd.DataFrame, n: int, low_high=(0.3,0.7), by='water_in_risk') -> pd.DataFrame:
@@ -151,10 +216,10 @@ def get_img(modality, data):
 
     return img, cmap, vmin
 
-def calc_performance(test_df: pd.DataFrame, dataset_root: Path, model_root: Path):
-
+def calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
+    
     miou_lst, f1_lst, hr_lst, tar_lst = [], [], [], []
-    for idx, row in test_df.iterrows():
+    for idx, row in tqdm(df.iterrows(), total=df.shape[0]):
 
         key = row['keys']
 
@@ -167,17 +232,17 @@ def calc_performance(test_df: pd.DataFrame, dataset_root: Path, model_root: Path
         mask = ds['bands'].values.flatten()
 
         # 2. Calculate Precision, Recall, and F1 for class '1'
-        tar_lst.append(precision_score(mask, pred, pos_label=1))
-        hr_lst.append(recall_score(mask, pred, pos_label=1))
-        f1_lst.append(f1_score(mask, pred, pos_label=1))
-        miou_lst.append(jaccard_score(mask, pred, average='macro'))
+        tar_lst.append(precision_score(mask, pred, pos_label=1, zero_division=0))
+        hr_lst.append(recall_score(mask, pred, pos_label=1, zero_division=0))
+        f1_lst.append(f1_score(mask, pred, pos_label=1, zero_division=0))
+        miou_lst.append(jaccard_score(mask, pred, average='macro', zero_division=0))
 
-    test_df['miou'] = miou_lst
-    test_df['f1'] = f1_lst
-    test_df['hr'] = hr_lst
-    test_df['tar'] = tar_lst
+    df['miou'] = miou_lst
+    df['f1'] = f1_lst
+    df['hr'] = hr_lst
+    df['tar'] = tar_lst
 
-    return test_df
+    return df
 
 def viz_sample_keys(
         sample_keys: pd.DataFrame, 
@@ -187,15 +252,15 @@ def viz_sample_keys(
 
     nrows = len(sample_keys)
     ncols = len(modalities) + 2 + 1
-    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(3*ncols, 3*nrows))
+    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(2*ncols, 2*nrows))
 
     i = 0
-    for idx, row in sample_keys.iterrows():
+    for idx, row in tqdm(sample_keys.iterrows(), total=sample_keys.shape[0]):
 
         key = row['keys']
         water_in_risk = row['water_in_risk']
 
-        axs[i,0].text(0.5, 0.5, f"{key}\n{water_in_risk:.4f}", ha='center', va='center', fontsize=12)
+        axs[i,0].text(0.5, 0.5, f"{key.split('_')[-1]}\n\nWater in Risk area\n{100*water_in_risk:.3f} %", ha='center', va='center', fontsize=12)
         axs[i,0].axis('off')
 
         for j, m in enumerate(modalities):
@@ -226,27 +291,27 @@ def viz_sample_keys(
 
     # Create legend if there is LULC in modalities
     if 'LULC' in modalities:
-        patches = [mpatches.Patch(
+        patches = [
+            mpatches.Patch(
             facecolor=LULC_COLORS[i], 
             label=LULC_LABELS[i], 
             edgecolor='#000000', 
             linewidth=0.2
-            ) for i in range(len(LULC_COLORS))]
+            ) for i in range(len(LULC_COLORS))
+            ]
 
-        # Adjust layout to leave room at the bottom for the legend
-        # plt.subplots_adjust(bottom=0.4) 
+        # Place legend relative to the figure
+        fig.legend(
+            handles=patches,
+            loc='lower right', 
+            bbox_to_anchor=(1, 0.04),
+            ncol=10,             # Fixed columns usually look cleaner than one long row
+            frameon=False,
+            fontsize='medium'
+            )
 
-        # Place legend on the figure
-        fig.legend(handles=patches,
-                loc='lower center',
-                bbox_to_anchor=(0.15, -0.02, 0.7, 0.05), # (x, y, width, height) relative to figure
-                ncol=len(LULC_LABELS),
-                mode="expand",
-                borderaxespad=0.,
-                frameon=False,
-                fontsize='medium')
-
-    plt.tight_layout()
+    plt.tight_layout(rect=[0.05, 0.05, 1, 1]) 
+    # plt.tight_layout()
     plt.show()
 
 def viz_tim_bar_plot(groups, metric, ylim):

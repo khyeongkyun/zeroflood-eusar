@@ -15,6 +15,7 @@ dependencies:
   - pillow
   - tqdm
   - tifffile
+  - seaborn
 
   # PyTorch
   - pytorch
