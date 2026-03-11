@@ -4,7 +4,7 @@
 #SBATCH -J preprocess
 #SBATCH --output=preprocess_%j.out
 #SBATCH --error=preprocess_%j.err
-#SBATCH -D /dss/dsshome1/07/di54rur/kim_he/ZeroFlood
+#SBATCH -D /dss/dsshome1/07/di54rur/kim_he/zeroflood-eusar
 #SBATCH --time=1-12:00:00
 
 # ======== General resourece setting
@@ -16,7 +16,7 @@
 # load required modules
 module load slurm_setup
 eval "$(conda shell.bash hook)"
-conda activate zeroflood
+conda activate zeroflood-eusar
 
 # run script as slurm job
 export PYTHONPATH=$PWD/src:$PYTHONPATH

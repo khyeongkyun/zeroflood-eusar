@@ -4,7 +4,7 @@
 #SBATCH -J pga_ft_tr_b_zf_tim_s
 #SBATCH --output=pga_ft_tr_b_zf_tim_s_%j.out
 #SBATCH --error=pga_ft_tr_b_zf_tim_s_%j.err
-#SBATCH -D /dss/dsshome1/07/di54rur/kim_he/ZeroFlood
+#SBATCH -D /dss/dsshome1/07/di54rur/kim_he/zeroflood-eusar
 #SBATCH --time=1-00:00:00
 
 # ======== General resourece setting
@@ -19,13 +19,13 @@
 # load required modules
 module load slurm_setup
 eval "$(micromamba shell hook --shell bash)"
-micromamba activate pangaea-bench
+micromamba activate zeroflood-eusar
 export PYTHONNOUSERSITE=1
 export MASTER_PORT=$((12000 + SLURM_JOB_ID % 20000))
 export HYDRA_FULL_ERROR=1
 
 # Set root path
-SOURCE_ROOT=/dss/dsshome1/07/di54rur/kim_he/pangaea-bench
+SOURCE_ROOT=/dss/dsshome1/07/di54rur/kim_he/zeroflood-eusar
 OUTPUT_ROOT=/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/
 MODEL_ROOT=/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/pretrained_models/TerraMind_v1_base.pt
 DATASET_ROOT=/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/ZeroFlood

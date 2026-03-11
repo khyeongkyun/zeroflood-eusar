@@ -22,6 +22,16 @@ from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_sco
 
 # OUTPUT_PATH: str | None = "summary.csv"
 
+class color_palette():
+    def __init__(self):
+
+        self.LULC_COLORS = ['#000000','#0000FF', '#00FF00', "#D0FF00", "#FF00D9", 
+                    "#574B57", "#FFA600", "#FFFFFF", "#00E1FF", "#FF002B"]
+        self.LULC_LABELS = ['NoData',     'Water',        'Trees',    'F-Vegetation', 'Crops',
+                    'BuiltArea',  'BareGround',   'SnowIce',  'Clouds',       'Rangeland']
+        self.MASK_COLORS = ['#ffffff','#0000FF']
+        self.MASK_LABELS = ['-', 'FloodHazard']
+
 def viz_perf_lines(df_dict, col_x='risk', col_y='f1'):
     """
     df_dict: dict of {'ModelName': df}
@@ -139,16 +149,6 @@ STATS_FOR_VIZ = {
     }
 }
 
-LULC_COLORS = ['#000000','#0000FF', '#00FF00', "#D0FF00", "#FF00D9", 
-               "#574B57", "#FFA600", "#FFFFFF", "#00E1FF", "#FF002B"]
-LULC_LABELS = ['NoData',     'Water',        'Trees',    'F-Vegetation', 'Crops',
-            'BuiltArea',  'BareGround',   'SnowIce',  'Clouds',       'Rangeland']
-LULC_CMAP = ListedColormap(LULC_COLORS)
-
-MASK_COLORS = ['#000000','#0000FF']
-MASK_LABELS = ['-', 'Flood_Risk']
-MASK_CMAP = ListedColormap(MASK_COLORS)
-
 def normalize(img,mean,std):
     for i in range(img.shape[0]):
         min_value = mean[i] - 2 * std[i]
@@ -188,18 +188,55 @@ def get_s1_img(data: np.array):
     img = normalize(data,mean,std)
     return img[1]
 
+def apply_mask_hatch(ax, img, hatch='....', color='#0000FF', alpha=0.4):
+    """Overlay a hatch pattern on flood-risk pixels (value == 1)."""
+    flood_mask = np.where(img == 1, 1.0, np.nan)
+    ax.contourf(
+        flood_mask,
+        levels=[0.5, 1.5],
+        hatches=[hatch],
+        colors='none',
+        # linewidths=0.5,
+    )
+    # Draw hatch lines in the desired color
+    for collection in ax.collections:
+        collection.set_edgecolor(color)
+
+    hatch_patch = [
+        mpatches.Patch(
+            facecolor=color,
+            edgecolor=color,
+            hatch=hatch,
+            label='FloodHazard',
+            alpha=0.4,
+            )
+        ]
+
+    return hatch_patch
+
 def get_img(modality, data):
+
+    c_info = color_palette()
+
+    lulc_colors = c_info.LULC_COLORS
+    lulc_labels = c_info.LULC_LABELS
+    lulc_cmap = ListedColormap(lulc_colors)
+
+    mask_colors = c_info.MASK_COLORS
+    mask_labels = c_info.MASK_LABELS
+    mask_cmap = ListedColormap(mask_colors)
 
     vmin, cmap = None, None
 
     if modality[:2] == 'S1': img = get_s1_img(data)
     elif modality[:2] == 'S2': img = get_s2_img(data)
     elif modality == 'DEM': img, cmap = data[0], 'BrBG_r'
-    elif modality == 'LULC': img, vmin, cmap = data[0], 0, LULC_CMAP
-    elif modality in ['PRED','MASK']: img, vmin, cmap = data[0], 0, MASK_CMAP
+    elif modality == 'LULC': img, vmin, cmap = data[0], 0, lulc_cmap
+    elif modality == 'LULC_water': img, vmin, cmap, lulc_colors, lulc_labels = data[0]==1 , 0, mask_cmap, mask_colors, mask_labels
+    # elif modality in ['PRED','MASK']: img, vmin, cmap = data[0], 0, MASK_CMAP
     else: img= data[0]
 
-    return img, cmap, vmin
+    return img, cmap, vmin, lulc_colors, lulc_labels
 
 def calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
     
@@ -229,10 +266,34 @@ def calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
 
     return df
 
+def plot_legend(patches, ncol=10, figsize=(12, .5)):
+    fig_legend, ax_legend = plt.subplots(figsize=figsize)
+    ax_legend.legend(
+        handles=patches,
+        loc='center',
+        ncol=ncol,
+        frameon=False,
+        fontsize='medium',
+    )
+    ax_legend.axis('off')
+    plt.tight_layout()
+    plt.show()
+
+def save_ax_as_img(fig, ax, filepath):
+    """Extract and save a single axes from a figure as an individual image."""
+
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+    fig.savefig(filepath, bbox_inches=extent)
+
 def viz_sample_keys(
         sample_keys: pd.DataFrame, 
         dataset_root: Path, model_root: Path,
-        modalities=['S1RTC', 'S2RGB', 'DEM', 'LULC']
+        modalities=['S1RTC', 'S2RGB', 'DEM', 'LULC'],
+        save_img=False,
+        show_legend=True,
         ):
 
     nrows = len(sample_keys)
@@ -252,21 +313,36 @@ def viz_sample_keys(
             
             store = zarr.storage.ZipStore(os.path.join(dataset_root, m, f"{key}.zarr.zip"), mode="r")
             ds = xr.open_zarr(store, consolidated=True)
-            img, cmap, vmin = get_img(m, ds['bands'].values)
+            img, cmap, vmin, lulc_colors, lulc_labels = get_img(m, ds['bands'].values)
             axs[i, j+1].imshow(img, cmap, vmin=vmin)
             axs[i, j+1].axis('off')
         
+        # Get water mask from LULC
+        store = zarr.storage.ZipStore(os.path.join(dataset_root, 'LULC', f"{key}.zarr.zip"), mode="r")
+        ds = xr.open_zarr(store, consolidated=True)
+        img_water, cmap, vmin, lulc_water_color, _ = get_img('LULC_water', ds['bands'].values)
+        axs[i, -2].imshow(img_water, cmap, vmin=vmin)
+        axs[i, -1].imshow(img_water, cmap, vmin=vmin)
+
+        # Image of Predictions
         store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
         ds = xr.open_zarr(store, consolidated=True)
-        img, cmap, vmin = get_img('PRED', ds['bands'].values)
-        axs[i, -2].imshow(img, cmap, vmin=vmin)
-        axs[i, -2].axis('off')
+        img, cmap, vmin, _, _ = get_img('PRED', ds['bands'].values)
+        hatch_patch = apply_mask_hatch(
+            axs[i, -2], img, color=lulc_water_color[-1],
+            )  # hatch on flood pixels
+        axs[i, -2].set_xticks([])
+        axs[i, -2].set_yticks([])
 
+        # Image of Ground truth
         store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
         ds = xr.open_zarr(store, consolidated=True)
-        img, cmap, vmin = get_img('MASK', ds['bands'].values)
-        axs[i, -1].imshow(img, cmap=cmap, vmin=vmin)
-        axs[i, -1].axis('off')
+        img, cmap, vmin, _, _ = get_img('MASK', ds['bands'].values)
+        hatch_patch = apply_mask_hatch(
+            axs[i, -1], img, color=lulc_water_color[-1],
+            )  # hatch on flood pixels
+        axs[i, -1].set_xticks([])
+        axs[i, -1].set_yticks([])
 
         i+=1
         
@@ -274,30 +350,41 @@ def viz_sample_keys(
     for ax, title in zip(axs[0], ['Key'] + modalities + ['Prediction', 'Ground Truth']):
         ax.set_title(title, fontsize=14)
 
-    # Create legend if there is LULC in modalities
-    if 'LULC' in modalities:
+    plt.tight_layout() 
+    plt.show()
+
+    if show_legend:
+        # Create legend if there is LULC in modalities
         patches = [
             mpatches.Patch(
-            facecolor=LULC_COLORS[i], 
-            label=LULC_LABELS[i], 
+            facecolor=lulc_colors[i], 
+            label=lulc_labels[i], 
             edgecolor='#000000', 
             linewidth=0.2
-            ) for i in range(len(LULC_COLORS))
+            ) for i in range(len(lulc_colors))
             ]
 
-        # Place legend relative to the figure
-        fig.legend(
-            handles=patches,
-            loc='lower right', 
-            bbox_to_anchor=(1, 0.04),
-            ncol=10,             # Fixed columns usually look cleaner than one long row
-            frameon=False,
-            fontsize='medium'
-            )
+        # Filter out NoData, Snow, and Ice for the legend.
+        patches = [p for i, p in enumerate(patches) if lulc_labels[i] not in ['NoData', 'SnowIce', 'Clouds']]
+        
+        # Add FloodHazard patch to the beginning of the list
+        patches = hatch_patch + patches
 
-    plt.tight_layout(rect=[0.05, 0.05, 1, 1]) 
-    # plt.tight_layout()
-    plt.show()
+        if 'LULC' not in modalities:
+            patches = patches[:2]       # Only FloodHazard and Water if LULC is not shown
+
+    # Save individual images after tight_layout
+    if save_img:
+        for idx, row in sample_keys.iterrows():
+            key = row['keys']
+
+            for j, m in enumerate(modalities):
+                save_ax_as_img(fig, axs[idx, j+1], f"./{key}_{m}.png")
+
+            save_ax_as_img(fig, axs[idx, -2], f"./{key}_PRED.png")
+            save_ax_as_img(fig, axs[idx, -1], f"./{key}_MASK.png")
+
+    return patches
 
 def viz_tim_bar_plot(groups, metric, ylim):
 

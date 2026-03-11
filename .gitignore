@@ -26,3 +26,4 @@ data/mados/splits/*
 
 # Added ============
 __archive__/
+notebooks/*.png
