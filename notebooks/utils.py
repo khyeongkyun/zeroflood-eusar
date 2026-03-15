@@ -19,14 +19,18 @@ from pathlib import Path
 from tqdm import tqdm
 
 from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_score
+import matplotlib.lines as mlines
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+
+from datetime import timedelta
 
 # OUTPUT_PATH: str | None = "summary.csv"
 
 class color_palette():
     def __init__(self):
 
-        self.LULC_COLORS = ['#000000','#0000FF', '#00FF00', "#D0FF00", "#FF00D9", 
-                    "#574B57", "#FFA600", "#FFFFFF", "#00E1FF", "#FF002B"]
+        self.LULC_COLORS = ['#000000','#0000FF', '#a6d854', "#66c2a5", "#fc8d62", 
+                    "#b3b3b3", "#e5c494", "#FFFFFF", "#00E1FF", "#e78ac3"]
         self.LULC_LABELS = ['NoData',     'Water',        'Trees',    'F-Vegetation', 'Crops',
                     'BuiltArea',  'BareGround',   'SnowIce',  'Clouds',       'Rangeland']
         self.MASK_COLORS = ['#ffffff','#0000FF']
@@ -60,48 +64,174 @@ def viz_perf_lines(df_dict, col_x='risk', col_y='f1'):
     plt.tight_layout()
     plt.show()
 
-def viz_perf_distr_multi(df_dict, col_x='risk', col_y='f1', ylim=(0,1)):
-    """
-    df_dict: dict of {'ModelName': df}
-    """
+def viz_perf_distr_multi_model_metric(df_dict, col_x='risk', col_y=['f1'], ylim=(0,1), figsize=(6, 3)):
+
+    # Ensure col_y is a list
+    if isinstance(col_y, str):
+        col_y = [col_y]
+
     combined_list = []
-    bins = np.linspace(0, 1, 11)
-    labels = [f"{b:.1f}" for b in bins[1:]]
+    bins = np.linspace(0, 100, 6)
+    labels = [f"{int(b)}" for b in bins[1:]]
 
     custom_palette = {}
-    for name, (df, color) in df_dict.items():
+    hatch_map = {}
+    all_cols = [col_x] + col_y
+    for name, (df, color, hatch) in df_dict.items():
         custom_palette[name] = color
-        temp = df[[col_x, col_y]].copy()
+        hatch_map[name] = hatch
+        temp = df[all_cols].copy()
         temp['x_bins'] = pd.cut(temp[col_x], bins=bins, labels=labels)
         temp['Source'] = name
         combined_list.append(temp)
 
-    # Merge all into one dataframe
     plot_df = pd.concat(combined_list)
+    hue_order = list(df_dict.keys())
+    n_bins = len(labels)
+    n_metrics = len(col_y)
 
-    fig, ax = plt.subplots(figsize=(8, 5))
+    fig, axs = plt.subplots(
+        nrows=n_metrics, ncols=1,
+        figsize=(figsize[0], figsize[1] * n_metrics),
+        sharex=True,  # ← shared x-axis
+    )
+
+    # Ensure axs is always iterable
+    if n_metrics == 1:
+        axs = [axs]
+
+    i = 0
+    for ax, metric in zip(axs, col_y):
+        sns.boxplot(
+            data=plot_df,
+            x='x_bins',
+            y=metric,
+            hue='Source',
+            hue_order=hue_order,
+            whis=0,
+            showfliers=False,
+            ax=ax,
+            palette=custom_palette,
+            gap=0.2,
+            saturation=1,
+            medianprops={"color": "r", "linewidth": 1},
+            native_scale=True,
+        )
+
+        # Apply hatches per box group
+        patches = [p for p in ax.patches if type(p) == mpatches.PathPatch]
+        for idx, patch in enumerate(patches):
+            model_name = hue_order[idx // n_bins]
+            patch.set_hatch(hatch_map[model_name])
+            patch.set_facecolor(custom_palette[model_name])
+            if hatch_map[model_name]:
+                patch.set_edgecolor('black')
+
+        ax.set_ylim(ylim[i])
+        ax.set_ylabel(metric)
+        ax.set_xlabel('')       # ← suppress per-subplot x label
+        ax.get_legend().remove()  # ← remove per-subplot legend
+        ax.grid(True, linestyle='--', alpha=0.6)
+        
+        i+=1
+
+    # Shared x label on the bottom subplot only
+    axs[-1].set_xlabel(col_x)
+
+    # Single shared legend on the bottom subplot
+    legend_handles = [
+        mpatches.Patch(
+            facecolor=custom_palette[name],
+            hatch=hatch_map[name],
+            edgecolor='black',
+            label=name,
+        )
+        for name in hue_order
+    ]
+    axs[-1].legend(
+        handles=legend_handles,
+        loc='lower right',
+        ncols=2,
+    )
+
+    plt.tight_layout()
+    plt.show()
+
+    return plot_df
+
+def viz_perf_distr_multi_model(df_dict, col_x='risk', col_y='f1', ylim=(0,1), figsize=(6, 3)):
+
+    combined_list = []
+    bins = np.linspace(0, 100, 6)
+    labels = [f"{int(b)}" for b in bins[1:]]
+
+    custom_palette = {}
+    hatch_map = {}
+    for name, (df, color, hatch) in df_dict.items():
+        custom_palette[name] = color
+        hatch_map[name] = hatch
+        temp = df[[col_x, col_y]].copy()
+        temp['x_bins'] = pd.cut(temp[col_x], bins=bins, labels=labels)
+        temp['Source'] = name
+        combined_list.append(temp)
+    
+    plot_df = pd.concat(combined_list)
+    hue_order = list(df_dict.keys())
+
+    fig, ax = plt.subplots(figsize=figsize)
     sns.boxplot(
-        data=plot_df, 
-        x='x_bins', 
-        y=col_y, 
+        data=plot_df,
+        x='x_bins',
+        y=col_y,
         hue='Source',
+        hue_order=hue_order,
         whis=0,
         showfliers=False,
         ax=ax,
         palette=custom_palette,
-        gap=0.2
+        gap=0.2,
+        saturation=1,
+        medianprops={"color": "r", "linewidth": 1},
+        native_scale=True
     )
 
-    ax.set_ylim(ylim[0],ylim[1])
+    # Apply hatches per box group
+    n_bins = len(labels)
+    patches = [p for p in ax.patches if type(p) == mpatches.PathPatch]
+    for idx, patch in enumerate(patches):
+        model_name = hue_order[idx // n_bins]
+        patch.set_hatch(hatch_map[model_name])
+        patch.set_facecolor(custom_palette[model_name])
+        if hatch_map[model_name]:
+            patch.set_edgecolor('black')
+
+    ax.set_ylim(ylim)
     ax.set_xlabel(col_x)
     ax.set_ylabel(col_y)
     ax.grid(True, linestyle='--', alpha=0.6)
-    ax.legend(title='Model', bbox_to_anchor=(1.05, 1), loc='upper left')
-    
+    legend_handles = [
+            mpatches.Patch(
+                facecolor=custom_palette[name],
+                hatch=hatch_map[name],
+                edgecolor='black',
+                label=name,
+            )
+            for name in hue_order
+        ]
+    ax.legend(
+        handles=legend_handles,
+        # title='Model',
+        # bbox_to_anchor=(1.05, 1),
+        loc='lower right',
+        ncols=2
+    )
+
     plt.tight_layout()
     plt.show()
 
-def get_sample_keys_auto(test_df: pd.DataFrame, n: int, low_high=(0.3,0.7), by='water_in_risk') -> pd.DataFrame:
+    return plot_df
+
+def get_sample_keys_auto(test_df: pd.DataFrame, n: int, low_high=(0.3,0.7), by='Water body in Flood Hazard (%)') -> pd.DataFrame:
 
     test_df = test_df.sort_values(by=by, ascending=False).reset_index(drop=True)
 
@@ -180,13 +310,31 @@ def get_s1_img(data: np.array):
     """
     Prepare S1 image for plotting.
     Normalize each band using mean and std from statistics.
+
+    R: VV   G: VH   B: VV/VH
     """
     mean = STATS_FOR_VIZ['mean']['S1RTC']  # shape: (number of S1 bands,)
     std = STATS_FOR_VIZ['std']['S1RTC']
-    
-    # # Normalize each band
     img = normalize(data,mean,std)
-    return img[1]
+
+    r = img[0].astype(np.float32)
+    g = img[1].astype(np.float32)
+
+    # Compute ratio, avoid division by zero
+    # ratio = np.where(g != 0, r / g, 0.0)
+    ratio = np.zeros_like(r)
+    np.divide(r, g, out=ratio, where=g != 0)
+
+    # Normalize only the ratio channel to [0, 1]
+    vmin, vmax = ratio.min(), ratio.max()
+    blue = (ratio - vmin) / (vmax - vmin) if vmax - vmin != 0 else np.zeros_like(ratio)
+    b = (blue * 255).clip(0, 255)
+
+    return np.stack([r, g, b], axis=-1).astype(np.uint8) 
+    # # Normalize each band
+    # img = normalize(data,mean,std)
+    # print(img[1].shape)
+    # return img[1]
 
 def apply_mask_hatch(ax, img, hatch='....', color='#0000FF', alpha=0.4):
     """Overlay a hatch pattern on flood-risk pixels (value == 1)."""
@@ -254,15 +402,15 @@ def calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
         mask = ds['bands'].values.flatten()
 
         # 2. Calculate Precision, Recall, and F1 for class '1'
-        tar_lst.append(precision_score(mask, pred, pos_label=1, zero_division=0))
-        hr_lst.append(recall_score(mask, pred, pos_label=1, zero_division=0))
-        f1_lst.append(f1_score(mask, pred, pos_label=1, zero_division=0))
-        miou_lst.append(jaccard_score(mask, pred, average='macro', zero_division=0))
+        tar_lst.append(100*precision_score(mask, pred, pos_label=1, zero_division=0))
+        hr_lst.append(100*recall_score(mask, pred, pos_label=1, zero_division=0))
+        f1_lst.append(100*f1_score(mask, pred, pos_label=1, zero_division=0))
+        miou_lst.append(100*jaccard_score(mask, pred, average='macro', zero_division=0))
 
-    df['miou'] = miou_lst
-    df['f1'] = f1_lst
-    df['hr'] = hr_lst
-    df['tar'] = tar_lst
+    df['mIoU'] = miou_lst 
+    df['F1'] = f1_lst 
+    df['Hit Rate'] = hr_lst 
+    df['True Alarm'] = tar_lst 
 
     return df
 
@@ -288,34 +436,199 @@ def save_ax_as_img(fig, ax, filepath):
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
     fig.savefig(filepath, bbox_inches=extent)
 
-def viz_sample_keys(
+def viz_sample_multimodel_keys(
         sample_keys: pd.DataFrame, 
-        dataset_root: Path, model_root: Path,
-        modalities=['S1RTC', 'S2RGB', 'DEM', 'LULC'],
+        dataset_root: Path, 
+        model_root_list: list,
+        model_name: list,
+        modalities=['S1RTC', 'S2RGB'],
+        ref_modalities=['S2RGB'],
+        fig_scale=1,
         save_img=False,
         show_legend=True,
         ):
 
     nrows = len(sample_keys)
-    ncols = len(modalities) + 2 + 1
-    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(2*ncols, 2*nrows))
+    ncols = len(modalities) + len(model_root_list) + 1   # the last one is for the ground truth
+    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_scale*ncols, fig_scale*nrows))
 
     i = 0
     for idx, row in tqdm(sample_keys.iterrows(), total=sample_keys.shape[0]):
 
         key = row['keys']
-        water_in_risk = row['water_in_risk']
-
-        axs[i,0].text(0.5, 0.5, f"{key.split('_')[-1]}\n\nWater in Risk area\n{100*water_in_risk:.3f} %", ha='center', va='center', fontsize=12)
-        axs[i,0].axis('off')
+        water_in_risk = row['Water body in Flood Hazard (%)']
 
         for j, m in enumerate(modalities):
             
             store = zarr.storage.ZipStore(os.path.join(dataset_root, m, f"{key}.zarr.zip"), mode="r")
             ds = xr.open_zarr(store, consolidated=True)
             img, cmap, vmin, lulc_colors, lulc_labels = get_img(m, ds['bands'].values)
-            axs[i, j+1].imshow(img, cmap, vmin=vmin)
-            axs[i, j+1].axis('off')
+            axs[i, j].imshow(img, cmap, vmin=vmin)  # ← j instead of j+1
+            axs[i, j].set_xticks([])
+            axs[i, j].set_yticks([])
+            if j > 0:
+                axs[i, j].axis('off')
+
+        # Get water mask from LULC
+        store = zarr.storage.ZipStore(os.path.join(dataset_root, 'LULC', f"{key}.zarr.zip"), mode="r")
+        ds = xr.open_zarr(store, consolidated=True)
+        img_water, cmap, vmin, lulc_water_color, _ = get_img('LULC_water', ds['bands'].values)
+        axs[i, -1].imshow(img_water, cmap, vmin=vmin)
+
+        for k, model_root in enumerate(model_root_list):
+
+            # Image of Predictions
+            axs[i, j+k+1].imshow(img_water, cmap, vmin=vmin)
+            store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
+            ds = xr.open_zarr(store, consolidated=True)
+            img, _, vmin, _, _ = get_img('PRED', ds['bands'].values)
+            hatch_patch = apply_mask_hatch(
+                axs[i, j+k+1], img, color=lulc_water_color[-1],
+                )
+            axs[i, j+k+1].set_xticks([])
+            axs[i, j+k+1].set_yticks([])
+
+        # Image of Ground truth
+        store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
+        ds = xr.open_zarr(store, consolidated=True)
+        img, cmap, vmin, _, _ = get_img('MASK', ds['bands'].values)
+        hatch_patch = apply_mask_hatch(
+            axs[i, -1], img, color=lulc_water_color[-1],
+            )
+        axs[i, -1].set_xticks([])
+        axs[i, -1].set_yticks([])
+
+        # Water-in-risk text box at lower right of last column
+        axs[i, -1].text(
+            0.98, 0.02,
+            f"WB in FH: {water_in_risk:.1f} %",
+            transform=axs[i, -1].transAxes,
+            ha='right', va='bottom',
+            fontsize=fig_scale+8,
+            bbox=dict(
+                boxstyle='round, pad=0.3',
+                facecolor='white',
+                edgecolor='grey',
+                alpha=0.8,
+            ),
+        )
+
+        i += 1
+        
+    # Set column headers
+    title_lst = modalities + model_name + ['Ground Truth']
+    for ax, title in zip(axs[0], title_lst): 
+        if title in ref_modalities:
+            ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{ref}}$', fontsize=12,)
+        else:
+            ax.set_title(title, fontsize=12,)
+
+    if show_legend:
+
+        if 'DEM' in title_lst:
+            dem_idx = title_lst.index('DEM')
+
+            # Get the axes at the bottom of the DEM column (last row)
+            ax_dem = axs[-1, dem_idx]
+
+            # Create an inset axes at the bottom of the DEM column
+            ax_cbar = inset_axes(
+                ax_dem,
+                width='100%',
+                height='10%',
+                loc='lower center',
+                bbox_to_anchor=(0, -0.18, 1, 1),
+                bbox_transform=ax_dem.transAxes,
+                borderpad=0,
+            )
+
+            # Draw colorbar
+            norm = plt.Normalize(vmin=0, vmax=1)
+            sm = plt.cm.ScalarMappable(cmap='BrBG_r', norm=norm)
+            sm.set_array([])
+            cbar = fig.colorbar(sm, cax=ax_cbar, orientation='horizontal')
+            cbar.set_ticks([])  # ← remove ticks entirely
+
+            # Place 'Low' and 'High' inside the colorbar
+            ax_cbar.text(0.01, 0.5, 'Low',  transform=ax_cbar.transAxes,
+                         ha='left',  va='center', fontsize=8, color='white',)
+            ax_cbar.text(0.99, 0.5, 'High', transform=ax_cbar.transAxes,
+                         ha='right', va='center', fontsize=8, color='white',)
+            
+
+        patches = [
+            mpatches.Patch(
+            facecolor=lulc_colors[i], 
+            label=lulc_labels[i], 
+            edgecolor='#000000', 
+            linewidth=0.2
+            ) for i in range(len(lulc_colors))
+            ]
+
+        patches = [p for i, p in enumerate(patches) if lulc_labels[i] not in ['NoData', 'SnowIce', 'Clouds']]
+        patches = hatch_patch + patches
+        patches = patches[2:] + [patches[1]] + [patches[0]] # Reorder 
+        if 'LULC' not in modalities:
+            patches = patches[-2:]
+
+        fig.legend(
+            handles=patches,
+            loc='lower right',
+            bbox_to_anchor=(0.99, -.015),
+            bbox_transform=fig.transFigure,  # ← relative to the whole figure
+            ncol=4,
+            fontsize=10,
+            frameon=True,
+        )
+
+    plt.tight_layout() 
+    plt.show()
+
+    # Save individual images after tight_layout
+    if save_img:
+        for idx, row in sample_keys.iterrows():
+            key = row['keys']
+
+            for j, m in enumerate(modalities):
+                save_ax_as_img(fig, axs[idx, j], f"./{key}_{m}.png")  # ← j instead of j+1
+
+            save_ax_as_img(fig, axs[idx, -2], f"./{key}_PRED.png")
+            save_ax_as_img(fig, axs[idx, -1], f"./{key}_MASK.png")
+
+    return patches
+
+
+def viz_sample_keys(
+        sample_keys: pd.DataFrame, 
+        dataset_root: Path, model_root: Path,
+        modalities=['S1RTC', 'S2RGB', 'DEM', 'LULC'],
+        tim_modalities=['S2RGB', 'DEM'],
+        ref_modalities=['LULC'],
+        fig_scale=1,
+        save_img=False,
+        show_legend=True,
+        ):
+
+    nrows = len(sample_keys)
+    ncols = len(modalities) + 1 + 1  # the last one is for the ground truth
+    fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_scale*ncols, fig_scale*nrows))
+
+    i = 0
+    for idx, row in tqdm(sample_keys.iterrows(), total=sample_keys.shape[0]):
+
+        key = row['keys']
+        water_in_risk = row['Water body in Flood Hazard (%)']
+
+        for j, m in enumerate(modalities):
+            
+            store = zarr.storage.ZipStore(os.path.join(dataset_root, m, f"{key}.zarr.zip"), mode="r")
+            ds = xr.open_zarr(store, consolidated=True)
+            img, cmap, vmin, lulc_colors, lulc_labels = get_img(m, ds['bands'].values)
+            axs[i, j].imshow(img, cmap, vmin=vmin)  # ← j instead of j+1
+            axs[i, j].set_xticks([])
+            axs[i, j].set_yticks([])
+            if j > 0:
+                axs[i, j].axis('off')
         
         # Get water mask from LULC
         store = zarr.storage.ZipStore(os.path.join(dataset_root, 'LULC', f"{key}.zarr.zip"), mode="r")
@@ -330,7 +643,7 @@ def viz_sample_keys(
         img, cmap, vmin, _, _ = get_img('PRED', ds['bands'].values)
         hatch_patch = apply_mask_hatch(
             axs[i, -2], img, color=lulc_water_color[-1],
-            )  # hatch on flood pixels
+            )
         axs[i, -2].set_xticks([])
         axs[i, -2].set_yticks([])
 
@@ -340,21 +653,69 @@ def viz_sample_keys(
         img, cmap, vmin, _, _ = get_img('MASK', ds['bands'].values)
         hatch_patch = apply_mask_hatch(
             axs[i, -1], img, color=lulc_water_color[-1],
-            )  # hatch on flood pixels
+            )
         axs[i, -1].set_xticks([])
         axs[i, -1].set_yticks([])
 
-        i+=1
+        # Water-in-risk text box at lower right of last column
+        axs[i, -1].text(
+            0.98, 0.02,
+            f"WB in FH: {water_in_risk:.1f} %",
+            transform=axs[i, -1].transAxes,
+            ha='right', va='bottom',
+            fontsize=fig_scale+8,
+            bbox=dict(
+                boxstyle='round, pad=0.3',
+                facecolor='white',
+                edgecolor='grey',
+                alpha=0.8,
+            ),
+        )
+
+        i += 1
         
     # Set column headers
-    for ax, title in zip(axs[0], ['Key'] + modalities + ['Prediction', 'Ground Truth']):
-        ax.set_title(title, fontsize=14)
-
-    plt.tight_layout() 
-    plt.show()
+    title_lst = modalities + ['Prediction', 'Ground Truth']
+    for ax, title in zip(axs[0], title_lst):
+        if title in tim_modalities:
+            if title == 'S2RGB': title = 'S2L2A'
+            ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{TiM}}$', fontsize=12,)
+        elif title in ref_modalities:
+            ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{ref}}$', fontsize=12,)
+        else:
+            ax.set_title(title, fontsize=12,)
 
     if show_legend:
-        # Create legend if there is LULC in modalities
+        if 'DEM' in title_lst:
+            dem_idx = title_lst.index('DEM')
+
+            # Get the axes at the bottom of the DEM column (last row)
+            ax_dem = axs[-1, dem_idx]
+
+            # Create an inset axes at the bottom of the DEM column
+            ax_cbar = inset_axes(
+                ax_dem,
+                width='100%',
+                height='10%',
+                loc='lower center',
+                bbox_to_anchor=(0, -0.18, 1, 1),
+                bbox_transform=ax_dem.transAxes,
+                borderpad=0,
+            )
+
+            # Draw colorbar
+            norm = plt.Normalize(vmin=0, vmax=1)
+            sm = plt.cm.ScalarMappable(cmap='BrBG_r', norm=norm)
+            sm.set_array([])
+            cbar = fig.colorbar(sm, cax=ax_cbar, orientation='horizontal')
+            cbar.set_ticks([])  # ← remove ticks entirely
+
+            # Place 'Low' and 'High' inside the colorbar
+            ax_cbar.text(0.01, 0.5, 'Low',  transform=ax_cbar.transAxes,
+                         ha='left',  va='center', fontsize=8, color='white',)
+            ax_cbar.text(0.99, 0.5, 'High', transform=ax_cbar.transAxes,
+                         ha='right', va='center', fontsize=8, color='white',)
+            
         patches = [
             mpatches.Patch(
             facecolor=lulc_colors[i], 
@@ -364,14 +725,24 @@ def viz_sample_keys(
             ) for i in range(len(lulc_colors))
             ]
 
-        # Filter out NoData, Snow, and Ice for the legend.
         patches = [p for i, p in enumerate(patches) if lulc_labels[i] not in ['NoData', 'SnowIce', 'Clouds']]
-        
-        # Add FloodHazard patch to the beginning of the list
         patches = hatch_patch + patches
-
+        patches = patches[2:] + [patches[1]] + [patches[0]] # Reorder 
         if 'LULC' not in modalities:
-            patches = patches[:2]       # Only FloodHazard and Water if LULC is not shown
+            patches = patches[-3:]
+
+        fig.legend(
+            handles=patches,
+            loc='lower right',
+            bbox_to_anchor=(0.99, -.025),
+            bbox_transform=fig.transFigure,  # ← relative to the whole figure
+            ncol=4,
+            fontsize=10,
+            frameon=True,
+        )
+
+    plt.tight_layout() 
+    plt.show()
 
     # Save individual images after tight_layout
     if save_img:
@@ -379,14 +750,14 @@ def viz_sample_keys(
             key = row['keys']
 
             for j, m in enumerate(modalities):
-                save_ax_as_img(fig, axs[idx, j+1], f"./{key}_{m}.png")
+                save_ax_as_img(fig, axs[idx, j], f"./{key}_{m}.png")  # ← j instead of j+1
 
             save_ax_as_img(fig, axs[idx, -2], f"./{key}_PRED.png")
             save_ax_as_img(fig, axs[idx, -1], f"./{key}_MASK.png")
 
     return patches
 
-def viz_tim_bar_plot(groups, metric, ylim):
+def viz_tim_bar_plot(groups, metric, ylim=None, figsize=(5, 3), legend_true=True):
 
     bar_width = 0.1
     item_gap = 0.01
@@ -396,7 +767,7 @@ def viz_tim_bar_plot(groups, metric, ylim):
     labels = []
     values = []
     colors = []
-    group_centers = []
+    group_boundaries = []
     cursor = 0.0
     for i, (group_name, group_df, color) in enumerate(groups):
         if i == 0: continue
@@ -410,28 +781,51 @@ def viz_tim_bar_plot(groups, metric, ylim):
             cursor += bar_width + item_gap
 
         if local_positions:
-            group_centers.append((group_name, (local_positions[0] + local_positions[-1]) / 2))
+            group_boundaries.append((group_name, local_positions[0], local_positions[-1]))
             cursor += group_gap
 
-    fig, ax = plt.subplots(figsize=(5,3))
+    fig, ax = plt.subplots(figsize=figsize)
     ax.bar(x_positions, values, width=bar_width, color=colors)
-    ax.set_xticks(x_positions)
-    ax.set_xticklabels(labels, rotation=45, ha='right')
-    ax.set_xlabel('Model')
+
+    # Center ylim around ref_value
+    ref_value = float(groups[0][1][metric])
+    ref_label = groups[0][0]
+    half_range = max(abs(ref_value - min(values)), abs(max(values) - ref_value))
+    if not ylim:
+        ylim = (0.99*(ref_value - half_range), 1.01*(ref_value + half_range))
+        
+    # Labels on top of each bar
+    for x, v, label in zip(x_positions, values, labels):
+        ax.text(
+            x, v + (ylim[1] - ylim[0]) * 0.01,
+            label,
+            ha='center', va='bottom',
+            fontsize=7,
+            rotation=45,
+        )
+
+    # Remove x tick labels, set ticks at group centers
+    ax.set_xticks([
+        (x_left + x_right) / 2
+        for _, x_left, x_right in group_boundaries
+    ])
+    ax.set_xticklabels([
+        group_name
+        for group_name, _, _ in group_boundaries
+    ], fontsize=9)
+
     ax.set_ylabel(metric)
-    ax.set_title(f'{metric} by Model Group')
-    ax.set_ylim(ylim)
-
-    # Dotted horizontal line at the value from tm_results_1 (first sorted item)
-    ref_value = float(groups[0][1][metric].iloc[0])
     ax.axhline(ref_value, color='black', linestyle=':', linewidth=1.5)
-    for group_name, center in group_centers:
-        ax.text(center, ax.get_ylim()[0], group_name, ha='center', va='bottom', fontsize=10)
-
-    # legend_handles = [Patch(facecolor=color, label=name) for name, _, color in groups]
-    # ax.legend(handles=legend_handles, title='Groups')
+    if legend_true:
+        legend_handles = [
+            mlines.Line2D([], [], color='black', linestyle=':', linewidth=1.5, label=ref_label),
+            mpatches.Patch(facecolor=groups[1][2], label='TerraMind-TiM'),
+        ]
+        ax.legend(handles=legend_handles, fontsize=8)   
 
     ax.grid(axis='y', linestyle='--', alpha=0.25)
+    ax.set_ylim(ylim)
+
     plt.tight_layout()
     plt.show()
 
@@ -459,6 +853,8 @@ def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
         "F1-score": "F1",
         "Precision": "Prec",
         "Recall": "Recall",
+        "T_train": "T_train",
+        "T_test": "T_test"
     }
 
     text = log_path.read_text(encoding="utf-8", errors="replace")
@@ -474,7 +870,16 @@ def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
     metrics: dict[str, dict[str, float]] = {k: {} for k in LOG_METRICS_TO_SHORT.values()}
     current_metric: str | None = None
 
+    matches = re.findall(r'\d+:\d{2}:\d{2}', lines[marker_idx])
+    h, m, s = map(int, matches[-1].split(':'))
+    metrics["T_train"] = timedelta(hours=h, minutes=m, seconds=s)
     for raw_line in lines[marker_idx + 1 :]:
+
+        matches = re.findall(r'\d+:\d{2}:\d{2}', raw_line)
+        if matches:
+            h, m, s = map(int, matches[-1].split(':'))
+            duration = timedelta(hours=h, minutes=m, seconds=s)
+
         line = strip_info_prefix(raw_line)
         if not line:
             continue
@@ -504,6 +909,8 @@ def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
             class_name = class_match.group(1)
             score = float(class_match.group(2))
             metrics[current_metric][class_name] = score
+    
+    metrics["T_test"] = duration - metrics["T_train"]
 
     return metrics
 
@@ -540,7 +947,7 @@ def calc_confusion_matrix(df: pd.DataFrame, split: str, print_summary=True, prin
     keys = df['keys'].tolist()
 
     water_in_risk = [
-        tp / (tp + fp) if (tp + fp) > 0 else None
+        100 * tp / (tp + fp) if (tp + fp) > 0 else None
         for _, _, fp, tp in tn_fn_fp_tp
     ]
 
@@ -564,14 +971,18 @@ def calc_confusion_matrix(df: pd.DataFrame, split: str, print_summary=True, prin
 
     if print_hist:
         plt.figure(figsize=figsize)
-        bins = np.arange(0,1.05,0.05)
+        bins = np.arange(0,105,5)
         _ = plt.hist(water_in_risk, bins=bins)
         plt.axvline(np.median(water_in_risk), color='k', linestyle='dashed', linewidth=1)
-        plt.xlim(0,1)
+        plt.text(median, plt.gca().get_ylim()[1] * 0.95, f'median={median:.1f}',
+                 rotation=90, va='top', ha='right', fontsize=9, color='k')
+        plt.xlim(0,100)
+        plt.xlabel('Water body in Flood hazard area (%)')
+        plt.ylabel('Sample count')
 
-    return pd.DataFrame({'keys': keys, 'water_in_risk': water_in_risk})
+    return pd.DataFrame({'keys': keys, 'Water body in Flood Hazard (%)': water_in_risk})
 
-def viz_lon_lat_heatmap(df: pd.DataFrame, figsize=(5,5), cmap="Blues"):
+def viz_lon_lat_heatmap(df: pd.DataFrame, figsize=(5,5), cmap="Blues", title_prefix=None):
     lon_lat = df["lon_lat"].apply(ast.literal_eval).tolist()
 
     lons = np.array([c[0] for c in lon_lat])
@@ -589,7 +1000,7 @@ def viz_lon_lat_heatmap(df: pd.DataFrame, figsize=(5,5), cmap="Blues"):
         lats, lons,
         bins=[lat_bins, lon_bins]
     )
-
+    heatmap = np.ma.masked_where(heatmap == 0, heatmap)
 
     fig = plt.figure(figsize=figsize)
     ax = plt.axes(projection=ccrs.PlateCarree())
@@ -613,8 +1024,9 @@ def viz_lon_lat_heatmap(df: pd.DataFrame, figsize=(5,5), cmap="Blues"):
     )
 
     # Colorbar
-    cbar = plt.colorbar(mesh, ax=ax, orientation="vertical", shrink=0.4)
-    plt.title(f"Sample heatmap: {len(df)}")
+    cbar = plt.colorbar(mesh, ax=ax, orientation="vertical", shrink=0.35, location='left',  pad=0.02)
+    if title_prefix:
+        plt.title(f"{title_prefix} heatmap: {len(df)} ea")
     cbar.set_label("Sample count")
     plt.tight_layout()
     plt.show()
