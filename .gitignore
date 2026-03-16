@@ -33,3 +33,5 @@ notebooks/*.png
 tmp*
 *.png
 *.pdf
+!assets/*.png
+!assets/*.pdf
