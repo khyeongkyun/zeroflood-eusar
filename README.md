@@ -63,6 +63,19 @@ torchrun --nnodes=1 --nproc_per_node=1 pangaea/run.py \
 > [!TIP]
 > You can also find slurm bash scripts at `./script/pangaea-bench`.
 
+#### Results and checkpoints
+
+|       Model      |   F1  | Hit Rate | True Alarm | ckpt     |
+|:----------------:|:-----:|:--------:|:----------:|----------|
+|       UNet       | 84.66 |   81.00  | 88.67      | [link](https://huggingface.co/khyeongkyun/zeroflood-baseline-unet) |
+|        ViT       | 84.64 |   81.46  | 88.08      | [link](https://huggingface.co/khyeongkyun/zeroflood-baseline-vit) |
+|    SSL4EO-MAE    | 85.23 |   81.39  | 89.44      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-ssl4eo-mae) |
+|       CROMA      | 83.63 |   79.72  | 87.95      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-croma) |
+|       DOFA       | 86.90 |   84.80  | 89.11      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-dofa) |
+|     TerraMind    | 88.36 |   86.77  | 90.02      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-terramind) |
+| TerraMind-TiM-sd | 89.50 |   88.98  | 90.03      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-terramind-tim) |
+
+
 ### Inference
 
 ```
