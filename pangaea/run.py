@@ -78,6 +78,7 @@ def main(cfg: DictConfig) -> None:
 
     # true if training else false
     train_run = cfg.train
+    save_eval_pred=cfg.save_eval_pred     # UPDATE: Save eval prediction
     if train_run:
         exp_info = get_exp_info(HydraConfig.get())
         exp_name = exp_info["exp_name"]
@@ -100,9 +101,8 @@ def main(cfg: DictConfig) -> None:
             cfg["wandb_run_id"] = wandb.run.id
         OmegaConf.save(cfg, config_log_dir / "config.yaml")
 
-    else:
+    else: 
         exp_dir = pathlib.Path(cfg.ckpt_dir)
-        save_pred = cfg.save_pred
         exp_name = exp_dir.name
         logger_path = exp_dir / "test.log"
         # load training config
@@ -288,7 +288,7 @@ def main(cfg: DictConfig) -> None:
     )
     test_evaluator: Evaluator = instantiate(
         cfg.task.evaluator, val_loader=test_loader, exp_dir=exp_dir, device=device, 
-        save_pred=save_pred,
+        save_pred=save_eval_pred,
     )
 
     if cfg.use_final_ckpt:

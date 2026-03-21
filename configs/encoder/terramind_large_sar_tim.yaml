@@ -23,4 +23,5 @@ output_dim: 1024
 # NOTE: ADDED for TiM -----------------------------------
 tim_modalities: ['S2L2A', 'LULC', 'DEM']
 pretrained: True
+tim_chained_generations: False
 # ------------------------------------------------------
