@@ -542,7 +542,7 @@ def viz_sample_multimodel_keys(
         model_root_list: list,
         model_name: list,
         modalities=['S1RTC'],
-        ref_modalities=['S2L2A'],
+        ref_modalities=[],
         fig_scale=1,
         save_img=False,
         show_legend=True,

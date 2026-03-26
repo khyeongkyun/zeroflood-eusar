@@ -74,19 +74,18 @@ class ZeroFlood(RawGeoFMDataset):
                 self.root_path / 'metadata' / f"info_val.csv", header=0, delimiter='\t'
                 ).iloc[:,0].to_list()
 
-        if 'sar' in self.bands.keys():
-            img_modality = 'S1RTC'
-        elif 'optical' in self.bands.keys():
-            img_modality = 'S2L2A'
-        else:
-            raise ValueError(f"Not supported bands: {self.bands}")
-
-        self.image_list = [str(self.root_path / tmp_split_folder / img_modality / f"{f}.zarr.zip") for f in self.valid_files]
+        image_list = {}
+        for k in self.bands.keys():
+            if 'sar' in k:
+                image_list['sar'] = [str(self.root_path / tmp_split_folder / 'S1RTC' / f"{f}.zarr.zip") for f in self.valid_files]
+            if 'optical' in k:
+                image_list['optical'] = [str(self.root_path / tmp_split_folder / 'S2L2A' / f"{f}.zarr.zip") for f in self.valid_files]
+        self.image_list = image_list
         self.target_list = [str(self.root_path / tmp_split_folder / 'MASK' / f"{f}.zarr.zip") for f in self.valid_files]
 
     def __len__(self):
         # Return the total number of samples
-        return len(self.image_list)
+        return len(self.target_list)
 
     def _load_file(self, path:Path):
 
@@ -117,18 +116,21 @@ class ZeroFlood(RawGeoFMDataset):
             "metadata": dict}.
         """
         # Load your data and labels here
-        image = self._load_file(self.image_list[index]) # CHW
+        image = {}
+        for k in self.bands.keys():
+            raw_image = self._load_file(self.image_list[k][index]) # CHW
+            raw_image = torch.tensor(raw_image, dtype=torch.float32) * self.constant_scale
+            raw_image = raw_image.unsqueeze(1)  # CHW -> C1HW
+            image[k] = raw_image
         target = self._load_file(self.target_list[index])[0] # HW
 
         # Convert to tensors
-        image = torch.tensor(image, dtype=torch.float32) * self.constant_scale
-        image = image.unsqueeze(1)  # (C, H, W) -> (C, 1, H, W)
         target = torch.tensor(target, dtype=torch.long)
         return {
-            'image': {list(self.bands.keys())[0] : image},
+            'image': image,
             'target': target,
             'metadata': {
-                'filename': self.image_list[index]
+                'filename': self.target_list[index]
             }
         }
 

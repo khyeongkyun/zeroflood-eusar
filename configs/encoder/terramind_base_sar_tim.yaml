@@ -4,7 +4,7 @@ download_url: null    # https://huggingface.co/ibm-esa-geospatial/TerraMind-1.0-
 
 input_size: 224
 patch_size: 16
-merge_method: null
+merge_method: "mean"
 modalities: ["S1RTC"]
 
 input_bands:

@@ -90,6 +90,12 @@ class TerraMindTiM(Encoder):
         img_size (int): Input image size.
         modalities (list, dict, optional): List of modality keys and dicts, or dict with modality keys and values being
             ints (num_channels of modality) or nn.Module (patch embedding layer).
+        tim_modalities (list, optional): List of tokenized modalities used for the TiM approach. The TiM outputs are
+            generated in the same order as specified in the given list. Defaults to [LULC].
+        tim_decoding_steps (int): Number of decoding steps for each TiM modality. Defaults to 1.
+        tim_temps (float): Sampling temperature for each TiM modality. Defaults to 1.0.
+        tim_top_p (float): Top-p sampling threshold for TiM modalities. Ignored if set to 0.0. Defaults to 0.8.
+        tim_top_k (int): Top-k sampling threshold for TiM modalities. Ignored if set to 0. Defaults to 0.
         merge_method (str, optional): Specify how the output is merged for further processing. One of 'mean', 'max',
             'concat', 'dict', or None. 'mean', 'max', and 'concat' are dropping all sequence modality tokens, split all
             image modality tokens and reduce the by applying the appropriate method. 'dict' splits all tokens into a
@@ -131,6 +137,7 @@ class TerraMindTiM(Encoder):
         tim_temps: float = 1.0,
         tim_top_p: float = 0.8,
         tim_top_k: int = 0,
+        tim_chained_generations: bool = False,
         num_register_tokens: int = 0,
         decoder_depth: int = 12,
         tokenizer_dict: dict | None = None,
@@ -154,7 +161,7 @@ class TerraMindTiM(Encoder):
         drop_rate: float = 0.0,
         attn_drop_rate: float = 0.0,
         modality_drop_rate: float = 0.0,
-        act_layer: torch.Tensor = nn.GELU,
+        act_layer: nn.Module = nn.GELU,
         norm_layer: partial | nn.Module = partial(LayerNorm, eps=1e-6),
         gated_mlp: bool = False,  # Make the feedforward gated for e.g. SwiGLU
         qk_norm: bool = False,
@@ -195,29 +202,41 @@ class TerraMindTiM(Encoder):
         self.tim_top_p = tim_top_p
         self.tim_top_k = tim_top_k
 
-        # Init embeddings for TiM model
-        self.tim_encoder_embeddings, _ = build_modality_embeddings(
-            MODALITY_INFO, modalities, img_size=img_size, dim=dim, patch_size=patch_size)
-        
-        tim_decoder_embeddings, tim_decoder_name_mapping = build_output_modality_embeddings(
-            MODALITY_INFO, self.tim_modalities, img_size=img_size, dim=dim, patch_size=patch_size)
-
-        # Build embedding layers for encoder (modalities and tim_modalities as inputs)
+        # UPDATED: Issue #1143: NEW - Build embedding layers for encoder (modalities and tim_modalities as inputs)
         mod_embeddings, mod_name_mapping = build_tim_modality_embeddings(
             modalities, self.tim_modalities, img_size=img_size, dim=dim, patch_size=patch_size)
+
+        # Init embeddings for TiM model
+        # UPDATED: Issue #1143: CHANGE
+        # self.tim_encoder_embeddings, _ = build_modality_embeddings(
+        #     MODALITY_INFO, modalities, img_size=img_size, dim=dim, patch_size=patch_size)
+        # UPDATED: Issue #1143:
+        print(f"FLAG tim_chained_generations {tim_chained_generations}")
+        if tim_chained_generations:
+            tim_encoder_embeddings = mod_embeddings
+        else:
+            tim_encoder_embeddings, _ = build_modality_embeddings(
+                MODALITY_INFO, modalities, img_size=img_size, dim=dim, patch_size=patch_size)
+        tim_decoder_embeddings, tim_decoder_name_mapping = build_output_modality_embeddings(
+            MODALITY_INFO, self.tim_modalities, img_size=img_size, dim=dim, patch_size=patch_size)
+        # UPDATED: Issue #1143:
+        # Build embedding layers for encoder (modalities and tim_modalities as inputs)
+        # mod_embeddings, mod_name_mapping = build_tim_modality_embeddings(
+        #     modalities, self.tim_modalities, img_size=img_size, dim=dim, patch_size=patch_size)
+        self.encoder_embeddings = nn.ModuleDict(mod_embeddings)
+        self.mod_name_mapping = mod_name_mapping
+        self.modalities = list(mod_name_mapping.keys())  # Further code expects list
         self.output_mod_name_mapping = {k: k for k in mod_name_mapping.keys()}
         self.output_mod_name_mapping.update({v: k for k, v in tim_decoder_name_mapping.items()})
         # ----------------------------------------------------------
 
-        self.encoder_embeddings = nn.ModuleDict(mod_embeddings)
-        self.mod_name_mapping = mod_name_mapping
-        self.modalities = list(mod_name_mapping.keys())  # Further code expects list
         self.patch_size = patch_size
 
         # EDITTED: for TiM --------------------------------------
         # Build TiM model
-        mae_model = TerraMind(
-            encoder_embeddings=self.tim_encoder_embeddings,
+        # UPDATED: Issue #1143:
+        enc_dec_model = TerraMind(
+            encoder_embeddings=tim_encoder_embeddings,
             decoder_embeddings=tim_decoder_embeddings,
             modality_info=MODALITY_INFO,
             dim=dim,
@@ -234,20 +253,22 @@ class TerraMindTiM(Encoder):
             qk_norm=qk_norm,
             num_register_tokens=num_register_tokens,
         )
-        # No fine-tuning of the mae model
-        mae_model = mae_model.requires_grad_(False)
-        self.sampler = GenerationSampler(mae_model)
+        # UPDATED: Issue #1143:
+        # No fine-tuning of the encoder decoder model
+        enc_dec_model = enc_dec_model.requires_grad_(False)
+        self.sampler = GenerationSampler(enc_dec_model)
         # ----------------------------------------------------------
 
         self.img_size = img_size
         self.merge_method = merge_method
+        # EDITTED: for TiM
         self.image_modalities = [key for key, value in self.encoder_embeddings.items()
                                  if isinstance(value, ImageEncoderEmbedding)
-                                 or isinstance(value, ImageTokenEncoderEmbedding)]      # EDITTED: for TiM
+                                 or isinstance(value, ImageTokenEncoderEmbedding)]
         self.modality_drop_rate = modality_drop_rate
         assert 0 <= self.modality_drop_rate <= 1, "modality_drop_rate must be in [0, 1]"
         # New learned parameter for handling missing modalities
-        if modality_drop_rate and self.merge_method == 'concat':
+        if self.merge_method == 'concat':
             self.missing_mod_token = nn.Parameter(torch.Tensor(dim))
 
         # stochastic depth decay rule
@@ -364,12 +385,10 @@ class TerraMindTiM(Encoder):
         # NOTE: 1. Input modality -> Raw image or Token(196)
         # Define the initial TiM input
         tim_dict = {}
-        img_num_tokens = 196  # Default value if no images are provided     
+        img_num_tokens = 196  # Default value if no images are provided
         for mod, value in list(d.items()):
-                    
             if self.mod_name_mapping[mod] in self.image_modalities:
                 input_size = value.shape
-
             if self.mod_name_mapping[mod] in self.tokenizer:
                 # Tokenize
                 with torch.no_grad():
@@ -392,17 +411,17 @@ class TerraMindTiM(Encoder):
                     "target_mask": torch.ones(batch_size, img_num_tokens, dtype=torch.bool, device=device),
                     "decoder_attention_mask": torch.zeros(batch_size, img_num_tokens, dtype=torch.bool, device=device),
                 }
-            
+
             # Encode input and provide expected format
             tim_dict[self.mod_name_mapping[mod]] = init_full_input_modality(
                 value,
                 MODALITY_INFO,
                 self.mod_name_mapping[mod],
-                device              # NOTE: what is eos_id for?
+                device
             )
 
         # NOTE: 2. Generate TiM tokens from Raw image or Token
-        # Initialize TiM modalities information
+        # Initialize TiM modalities
         target_domains = []
         tokens_per_target = []
         autoregression_schemes = []
@@ -429,7 +448,7 @@ class TerraMindTiM(Encoder):
                 MODALITY_INFO, self.mod_name_mapping[mod], batch_size, mod_num_tokens, device)
         num_tim_mod = len(target_domains)
 
-        # Create TiM generation schedules       
+        # Predict tokens for TiM modalities
         schedule = build_chained_generation_schedules(
             cond_domains=[self.mod_name_mapping[m] for m in d_mod],
             target_domains=target_domains,
@@ -477,13 +496,13 @@ class TerraMindTiM(Encoder):
         num_tokens = []
         image_mod = []
         for mod, tensor in d.items():
-            assert mod in self.mod_name_mapping.keys(), \
-                f'No patch embedding layer found for modality {mod}.'
             mod_dict = self.encoder_embeddings[self.mod_name_mapping[mod]](tensor)
             # Add embeddings to patchified data
             x.append(mod_dict['x'] + mod_dict['emb'])
             num_tokens.append(mod_dict['x'].shape[-2])
             image_mod.append(self.mod_name_mapping[mod] in self.image_modalities)
+
+        # Concatenate along token dim
         x = torch.cat(x, dim=1)  # Shape: (B, N, D)
 
         # EDITTED: for TiM --------------------------------------

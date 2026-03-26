@@ -26,7 +26,7 @@ export HYDRA_FULL_ERROR=1
 
 # Set root path
 SOURCE_ROOT=/dss/dsshome1/07/di54rur/kim_he/zeroflood-eusar
-CKPT_DIR=/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/models/zeroflood-baseline-vit
+CKPT_DIR=/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/models/zeroflood-gfm-terramind-tim/input-optical-sar/ld
 
 cd $SOURCE_ROOT
 
@@ -35,4 +35,4 @@ srun torchrun --nnodes=1 --nproc_per_node=1 --master_port $MASTER_PORT \
    pangaea/run.py \
    --config-name=test \
    ckpt_dir=$CKPT_DIR \
-   save_pred=true
+   save_eval_pred=True 

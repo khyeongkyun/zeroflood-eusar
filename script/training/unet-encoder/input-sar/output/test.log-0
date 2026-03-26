@@ -1,0 +1,123 @@
+INFO - 03/06/26 10:07:22 - 0:00:00 - ============ Initialized logger ============
+INFO - 03/06/26 10:07:22 - 0:00:00 - 'batch_size': 16,
+                                      'ckpt_dir': None,
+                                      'criterion': {'_target_': 'torch.nn.CrossEntropyLoss',
+                                                    'ignore_index': '${dataset.ignore_index}'},
+                                      'data_replicate': 1,
+                                      'dataset': {'_target_': 'pangaea.datasets.zeroflood.ZeroFlood',
+                                                  'auto_download': False,
+                                                  'bands': {'sar': ['VV', 'VH']},
+                                                  'classes': ['null', 'flood_rp10'],
+                                                  'constant_scale': 1,
+                                                  'data_max': {'sar': [42.3125, 40.8125]},
+                                                  'data_mean': {'sar': [-11.75303324, -17.50780573]},
+                                                  'data_min': {'sar': [-56.15625, -61.3125]},
+                                                  'data_std': {'sar': [5.03739141, 4.57518098]},
+                                                  'dataset_name': 'ZeroFlood',
+                                                  'distribution': [0.66, 0.34],
+                                                  'download_url': 'None',
+                                                  'ignore_index': -1,
+                                                  'img_size': 264,
+                                                  'multi_modal': False,
+                                                  'multi_temporal': False,
+                                                  'num_classes': 2,
+                                                  'root_path': '/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/ZeroFlood'},
+                                      'decoder': {'_target_': 'pangaea.decoders.unet.UNet',
+                                                  'encoder': None,
+                                                  'finetune': '${finetune}',
+                                                  'num_classes': '${dataset.num_classes}'},
+                                      'encoder': {'_target_': 'pangaea.encoders.unet_encoder.UNet',
+                                                  'download_url': None,
+                                                  'encoder_weights': None,
+                                                  'input_bands': '${dataset.bands}',
+                                                  'input_size': '${dataset.img_size}',
+                                                  'output_dim': [64, 128, 256, 512],
+                                                  'topology': [64, 128, 256, 512]},
+                                      'finetune': True,
+                                      'limited_label_strategy': 'stratified',
+                                      'limited_label_train': 1,
+                                      'limited_label_val': 1,
+                                      'lr_scheduler': {'_target_': 'pangaea.utils.schedulers.MultiStepLR',
+                                                       'lr_milestones': [0.6, 0.9],
+                                                       'optimizer': None,
+                                                       'total_iters': None},
+                                      'num_workers': 4,
+                                      'optimizer': {'_target_': 'torch.optim.AdamW',
+                                                    'betas': [0.9, 0.999],
+                                                    'lr': 0.0001,
+                                                    'params': None,
+                                                    'weight_decay': 0.05},
+                                      'preprocessing': {'test': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                 'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'train': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                  'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.RandomCropToEncoder'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'val': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]}},
+                                      'save_pred': False,
+                                      'seed': 234,
+                                      'stratification_bins': 3,
+                                      'task': {'evaluator': {'_target_': 'pangaea.engine.evaluator.SegEvaluator',
+                                                             'device': None,
+                                                             'exp_dir': None,
+                                                             'inference_mode': 'sliding',
+                                                             'sliding_inference_batch': 8,
+                                                             'use_wandb': '${use_wandb}',
+                                                             'val_loader': None},
+                                               'trainer': {'_target_': 'pangaea.engine.trainer.SegTrainer',
+                                                           'best_metric_key': 'mIoU',
+                                                           'ckpt_interval': 20,
+                                                           'criterion': None,
+                                                           'device': None,
+                                                           'eval_interval': 5,
+                                                           'evaluator': None,
+                                                           'exp_dir': None,
+                                                           'log_interval': 100,
+                                                           'lr_scheduler': None,
+                                                           'model': None,
+                                                           'n_epochs': 80,
+                                                           'optimizer': None,
+                                                           'precision': 'fp32',
+                                                           'train_loader': None,
+                                                           'use_wandb': '${use_wandb}'}},
+                                      'test_batch_size': 1,
+                                      'test_num_workers': 4,
+                                      'train': True,
+                                      'use_final_ckpt': False,
+                                      'use_wandb': False,
+                                      'wandb_run_id': None,
+                                      'work_dir': '/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/'
+INFO - 03/06/26 10:07:22 - 0:00:00 - The experiment is stored in /dss/dsstbyfs02/scratch/07/di54rur/zeroflood/pangaea-bench/zeroflood-baseline-unet
+                                     
+INFO - 03/06/26 10:07:22 - 0:00:00 - Device used: cuda:0
+INFO - 03/06/26 10:07:22 - 0:00:00 - Built unet_encoder.
+INFO - 03/06/26 10:07:23 - 0:00:00 - Built UNet_SingleTemporal_SemanticSegmentation for with UNet encoder.
+INFO - 03/06/26 10:07:23 - 0:00:01 - Loaded checkpoint__best for evaluation
+INFO - 03/06/26 10:07:29 - 0:00:07 - [test] ------- IoU --------
+                                     null      	 87.440
+                                     flood_rp10	 73.397
+                                     [test]-------------------
+                                     [test] Mean	 80.418
+INFO - 03/06/26 10:07:29 - 0:00:07 - [test] ------- F1-score --------
+                                     null      	 93.299
+                                     flood_rp10	 84.657
+                                     [test]-------------------
+                                     [test] Mean	 88.978
+INFO - 03/06/26 10:07:29 - 0:00:07 - [test] ------- Precision --------
+                                     null      	 95.179
+                                     flood_rp10	 80.995
+                                     [test]-------------------
+                                     [test] Mean	 88.087
+INFO - 03/06/26 10:07:29 - 0:00:07 - [test] ------- Recall --------
+                                     null      	 91.493
+                                     flood_rp10	 88.667
+                                     [test]-------------------
+                                     [test] Mean	 90.080
+INFO - 03/06/26 10:07:29 - 0:00:07 - Mean Accuracy: 90.672 
+                                     

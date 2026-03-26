@@ -1,0 +1,129 @@
+INFO - 03/06/26 10:17:16 - 0:00:00 - ============ Initialized logger ============
+INFO - 03/06/26 10:17:16 - 0:00:00 - 'batch_size': 16,
+                                      'ckpt_dir': None,
+                                      'criterion': {'_target_': 'torch.nn.CrossEntropyLoss',
+                                                    'ignore_index': '${dataset.ignore_index}'},
+                                      'data_replicate': 1,
+                                      'dataset': {'_target_': 'pangaea.datasets.zeroflood.ZeroFlood',
+                                                  'auto_download': False,
+                                                  'bands': {'sar': ['VV', 'VH']},
+                                                  'classes': ['null', 'flood_rp10'],
+                                                  'constant_scale': 1,
+                                                  'data_max': {'sar': [42.3125, 40.8125]},
+                                                  'data_mean': {'sar': [-11.75303324, -17.50780573]},
+                                                  'data_min': {'sar': [-56.15625, -61.3125]},
+                                                  'data_std': {'sar': [5.03739141, 4.57518098]},
+                                                  'dataset_name': 'ZeroFlood',
+                                                  'distribution': [0.66, 0.34],
+                                                  'download_url': 'None',
+                                                  'ignore_index': -1,
+                                                  'img_size': 264,
+                                                  'multi_modal': False,
+                                                  'multi_temporal': False,
+                                                  'num_classes': 2,
+                                                  'root_path': '/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/ZeroFlood'},
+                                      'decoder': {'_target_': 'pangaea.decoders.upernet.SegUPerNet',
+                                                  'channels': 512,
+                                                  'encoder': None,
+                                                  'finetune': '${finetune}',
+                                                  'num_classes': '${dataset.num_classes}'},
+                                      'encoder': {'_target_': 'pangaea.encoders.vit_encoder.VIT_EncoderSAR',
+                                                  'depth': 12,
+                                                  'download_url': None,
+                                                  'embed_dim': 768,
+                                                  'encoder_weights': None,
+                                                  'input_bands': '${dataset.bands}',
+                                                  'input_size': 224,
+                                                  'mlp_ratio': 4,
+                                                  'num_heads': 12,
+                                                  'output_dim': 768,
+                                                  'output_layers': [3, 5, 7, 11],
+                                                  'patch_size': 16},
+                                      'finetune': True,
+                                      'limited_label_strategy': 'stratified',
+                                      'limited_label_train': 1,
+                                      'limited_label_val': 1,
+                                      'lr_scheduler': {'_target_': 'pangaea.utils.schedulers.MultiStepLR',
+                                                       'lr_milestones': [0.6, 0.9],
+                                                       'optimizer': None,
+                                                       'total_iters': None},
+                                      'num_workers': 4,
+                                      'optimizer': {'_target_': 'torch.optim.AdamW',
+                                                    'betas': [0.9, 0.999],
+                                                    'lr': 0.0001,
+                                                    'params': None,
+                                                    'weight_decay': 0.05},
+                                      'preprocessing': {'test': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                 'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'train': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                  'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.RandomCropToEncoder'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'val': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]}},
+                                      'save_pred': False,
+                                      'seed': 234,
+                                      'stratification_bins': 3,
+                                      'task': {'evaluator': {'_target_': 'pangaea.engine.evaluator.SegEvaluator',
+                                                             'device': None,
+                                                             'exp_dir': None,
+                                                             'inference_mode': 'sliding',
+                                                             'sliding_inference_batch': 8,
+                                                             'use_wandb': '${use_wandb}',
+                                                             'val_loader': None},
+                                               'trainer': {'_target_': 'pangaea.engine.trainer.SegTrainer',
+                                                           'best_metric_key': 'mIoU',
+                                                           'ckpt_interval': 20,
+                                                           'criterion': None,
+                                                           'device': None,
+                                                           'eval_interval': 5,
+                                                           'evaluator': None,
+                                                           'exp_dir': None,
+                                                           'log_interval': 100,
+                                                           'lr_scheduler': None,
+                                                           'model': None,
+                                                           'n_epochs': 80,
+                                                           'optimizer': None,
+                                                           'precision': 'fp32',
+                                                           'train_loader': None,
+                                                           'use_wandb': '${use_wandb}'}},
+                                      'test_batch_size': 1,
+                                      'test_num_workers': 4,
+                                      'train': True,
+                                      'use_final_ckpt': False,
+                                      'use_wandb': False,
+                                      'wandb_run_id': None,
+                                      'work_dir': '/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/'
+INFO - 03/06/26 10:17:16 - 0:00:00 - The experiment is stored in /dss/dsstbyfs02/scratch/07/di54rur/zeroflood/pangaea-bench/zeroflood-baseline-vit
+                                     
+INFO - 03/06/26 10:17:16 - 0:00:00 - Device used: cuda:0
+INFO - 03/06/26 10:17:20 - 0:00:04 - Built vit_encoder.
+INFO - 03/06/26 10:17:21 - 0:00:05 - Built UPerNet for with VIT_EncoderSAR encoder.
+INFO - 03/06/26 10:17:22 - 0:00:06 - Loaded checkpoint__best for evaluation
+INFO - 03/06/26 10:17:38 - 0:00:22 - [test] ------- IoU --------
+                                     null      	 87.327
+                                     flood_rp10	 73.371
+                                     [test]-------------------
+                                     [test] Mean	 80.349
+INFO - 03/06/26 10:17:38 - 0:00:22 - [test] ------- F1-score --------
+                                     null      	 93.235
+                                     flood_rp10	 84.641
+                                     [test]-------------------
+                                     [test] Mean	 88.938
+INFO - 03/06/26 10:17:38 - 0:00:22 - [test] ------- Precision --------
+                                     null      	 94.867
+                                     flood_rp10	 81.460
+                                     [test]-------------------
+                                     [test] Mean	 88.163
+INFO - 03/06/26 10:17:38 - 0:00:22 - [test] ------- Recall --------
+                                     null      	 91.658
+                                     flood_rp10	 88.080
+                                     [test]-------------------
+                                     [test] Mean	 89.869
+INFO - 03/06/26 10:17:38 - 0:00:22 - Mean Accuracy: 90.607 
+                                     
