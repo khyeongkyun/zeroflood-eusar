@@ -6,6 +6,9 @@
 Updated
 - [2026-03-01] Paper was accepted at EUSAR 2026!
 
+Todo
+- [] Rerun: optical, optical-sar input band changed (Optical input band naming changed)
+
 ## Dataset
 
 Fine-tuning dataset is accessible via [HuggingFace](https://huggingface.co/datasets/khyeongkyun/ZeroFlood). Each modality in the split are zipped (e.g., `./train/S1RTC.zip`). Please unzip before using it.

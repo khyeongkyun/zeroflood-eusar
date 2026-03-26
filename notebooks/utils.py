@@ -18,7 +18,7 @@ from matplotlib.colors import ListedColormap
 from pathlib import Path
 from tqdm import tqdm
 
-from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_score
+from sklearn.metrics import precision_score, recall_score, f1_score, jaccard_score, confusion_matrix
 import matplotlib.lines as mlines
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
@@ -77,7 +77,7 @@ def viz_perf_distr_multi_model_metric(df_dict, col_x='risk', col_y=['f1'], ylim=
     custom_palette = {}
     hatch_map = {}
     all_cols = [col_x] + col_y
-    for name, (df, color, hatch) in df_dict.items():
+    for name, (df, _, color, hatch) in df_dict.items():
         custom_palette[name] = color
         hatch_map[name] = hatch
         temp = df[all_cols].copy()
@@ -85,7 +85,7 @@ def viz_perf_distr_multi_model_metric(df_dict, col_x='risk', col_y=['f1'], ylim=
         temp['Source'] = name
         combined_list.append(temp)
 
-    plot_df = pd.concat(combined_list)
+    plot_df = pd.concat(combined_list).reset_index(drop=True)
     hue_order = list(df_dict.keys())
     n_bins = len(labels)
     n_metrics = len(col_y)
@@ -376,33 +376,143 @@ def get_img(modality, data):
 
     return img, cmap, vmin, lulc_colors, lulc_labels
 
-def calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
+# def _calc_performance(df: pd.DataFrame, dataset_root: Path, model_root: Path):
     
-    miou_lst, f1_lst, hr_lst, tar_lst = [], [], [], []
+#     miou_lst, f1_lst, hr_lst, ta_list = [], [], [], []
+#     for idx, row in tqdm(df.iterrows(), total=df.shape[0]):
+
+#         key = row['keys']
+
+#         store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
+#         ds = xr.open_zarr(store, consolidated=True)
+#         pred = ds['bands'].values.flatten()
+
+#         store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
+#         ds = xr.open_zarr(store, consolidated=True)
+#         gt = ds['bands'].values.flatten()
+
+#         # 2. Calculate Precision, Recall, and F1 for class '1'
+#         # miou_lst.append(100*jaccard_score(gt, pred, average='macro', zero_division=np.nan))
+#         f1_lst.append(100*f1_score(gt, pred, pos_label=1, zero_division=np.nan))
+#         hr_lst.append(100*recall_score(gt, pred, pos_label=1, zero_division=np.nan))
+#         ta_list.append(100*precision_score(gt, pred, pos_label=1, zero_division=np.nan))
+
+#     # df['mIoU'] = miou_lst 
+#     df['F1'] = f1_lst 
+#     df['Hit Rate'] = hr_lst 
+#     df['True Alarm'] = ta_list 
+
+#     return df
+
+# def calc_performance_v2(df: pd.DataFrame, dataset_root: Path, model_root: Path, print_micro=True):
+    
+#     f1_lst, recall_lst, precision_list = [], [], []
+
+#     if print_micro:
+#         # For micro averaging
+#         total_tp, total_fp, total_fn = 0, 0, 0
+
+#     for idx, row in tqdm(df.iterrows(), total=df.shape[0]):
+
+#         key = row['keys']
+
+#         store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
+#         ds = xr.open_zarr(store, consolidated=True)
+#         pred = ds['bands'].values.flatten()
+
+#         store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
+#         ds = xr.open_zarr(store, consolidated=True)
+#         gt = ds['bands'].values.flatten()
+
+#         # Per-sample metrics (macro when averaged)
+#         f1_lst.append(100 * f1_score(gt, pred, pos_label=1, zero_division=0))
+#         recall_lst.append(100 * recall_score(gt, pred, pos_label=1, zero_division=0))
+#         precision_list.append(100 * precision_score(gt, pred, pos_label=1, zero_division=0))
+
+#         if print_micro:
+#             # Accumulate counts for micro averaging
+#             total_tp += ((pred == 1) & (gt == 1)).sum()
+#             total_fp += ((pred == 1) & (gt == 0)).sum()
+#             total_fn += ((pred == 0) & (gt == 1)).sum()
+    
+#     # Macro metrics (per-sample average)
+#     df['F1'] = f1_lst
+#     df['Recall'] = recall_lst
+#     df['Precision'] = precision_list
+
+#     if print_micro:
+#         # Micro metrics (global TP/FP/FN)
+#         micro_precision = total_tp / (total_tp + total_fp) if (total_tp + total_fp) > 0 else np.nan
+#         micro_recall    = total_tp / (total_tp + total_fn) if (total_tp + total_fn) > 0 else np.nan
+#         micro_f1 = (
+#             2 * micro_precision * micro_recall / (micro_precision + micro_recall)
+#             if (micro_precision + micro_recall) > 0 else np.nan
+#         )
+
+#         micro_metrics = {
+#             'micro_f1':        f"{100 * micro_f1.item():.2f}",
+#             'micro_recall':  f"{100 * micro_recall.item():.2f}",
+#             'micro_precision': f"{100 * micro_precision.item():.2f}",
+#         }
+#         print(micro_metrics)
+#         print(pred.shape, gt.shape, ds['bands'].values.shape)
+#     print(df.head())
+#     return df
+
+def calc_performance_v3(df: pd.DataFrame, dataset_root: Path, model_root: Path, print_micro=False):
+
+    f1_lst, recall_lst, precision_lst = [], [], []
+
+    # For micro averaging
+    tn_total, fp_total, fn_total, tp_total = 0, 0, 0, 0
+
     for idx, row in tqdm(df.iterrows(), total=df.shape[0]):
 
         key = row['keys']
 
-        store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
-        ds = xr.open_zarr(store, consolidated=True)
-        pred = ds['bands'].values.flatten()
+        pred_store = zarr.storage.ZipStore(os.path.join(model_root, 'PRED', f"{key}.zarr.zip"), mode="r")
+        pred_ds = xr.open_zarr(pred_store, consolidated=True)
+        pred = pred_ds['bands'].values.flatten()
 
-        store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
-        ds = xr.open_zarr(store, consolidated=True)
-        mask = ds['bands'].values.flatten()
+        gt_store = zarr.storage.ZipStore(os.path.join(dataset_root, 'MASK', f"{key}.zarr.zip"), mode="r")
+        gt_ds = xr.open_zarr(gt_store, consolidated=True)
+        gt = gt_ds['bands'].values.flatten()
 
-        # 2. Calculate Precision, Recall, and F1 for class '1'
-        tar_lst.append(100*precision_score(mask, pred, pos_label=1, zero_division=0))
-        hr_lst.append(100*recall_score(mask, pred, pos_label=1, zero_division=0))
-        f1_lst.append(100*f1_score(mask, pred, pos_label=1, zero_division=0))
-        miou_lst.append(100*jaccard_score(mask, pred, average='macro', zero_division=0))
+        tn, fp, fn, tp = confusion_matrix(gt, pred).ravel().tolist()
 
-    df['mIoU'] = miou_lst 
-    df['F1'] = f1_lst 
-    df['Hit Rate'] = hr_lst 
-    df['True Alarm'] = tar_lst 
+        recall = 100 * tp / (tp+fn + 1e-6)
+        precision = 100 * tp / (tp+fp + 1e-6)
+        f1 = 100 * 2 * precision * recall / (precision + recall + 1e-6)
+        recall_lst.append(recall)
+        precision_lst.append(precision)
+        f1_lst.append(f1)
 
+        tn_total += tn
+        fp_total += fp
+        fn_total += fn
+        tp_total += tp
+
+    # Macro metrics (per-sample average)
+    df['F1'] = f1_lst
+    df['Recall'] = recall_lst
+    df['Precision'] = precision_lst
+
+    if print_micro:
+
+        micro_recall = tp_total / (tp_total+fn_total)
+        micro_precision = tp_total / (tp_total+fp_total)
+        micro_f1 = 2 * micro_precision * micro_recall / (micro_precision + micro_recall)
+
+        micro_metrics = {
+            'micro_f1':        f"{100 * micro_f1:.2f}",
+            'micro_recall':  f"{100 * micro_recall:.2f}",
+            'micro_precision': f"{100 * micro_precision:.2f}",
+        }
+        print(micro_metrics)
+        # print(pred.shape, gt.shape, gt_ds['bands'].values.shape)
+    
     return df
+
 
 def plot_legend(patches, ncol=10, figsize=(12, .5)):
     fig_legend, ax_legend = plt.subplots(figsize=figsize)
@@ -431,15 +541,15 @@ def viz_sample_multimodel_keys(
         dataset_root: Path, 
         model_root_list: list,
         model_name: list,
-        modalities=['S1RTC', 'S2RGB'],
-        ref_modalities=['S2RGB'],
+        modalities=['S1RTC'],
+        ref_modalities=['S2L2A'],
         fig_scale=1,
         save_img=False,
         show_legend=True,
         ):
 
     nrows = len(sample_keys)
-    ncols = len(modalities) + len(model_root_list) + 1   # the last one is for the ground truth
+    ncols = len(modalities) + len(ref_modalities) + len(model_root_list) + 1   # the last one is for the ground truth
     fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_scale*ncols, fig_scale*nrows))
 
     i = 0
@@ -448,8 +558,9 @@ def viz_sample_multimodel_keys(
         key = row['keys']
         water_in_risk = row['Water body in Flood Hazard (%)']
 
-        for j, m in enumerate(modalities):
-            
+        for j, m in enumerate(modalities + ref_modalities):
+            if 'S2' in m:
+                m = 'S2RGB'
             store = zarr.storage.ZipStore(os.path.join(dataset_root, m, f"{key}.zarr.zip"), mode="r")
             ds = xr.open_zarr(store, consolidated=True)
             img, cmap, vmin, lulc_colors, lulc_labels = get_img(m, ds['bands'].values)
@@ -506,7 +617,7 @@ def viz_sample_multimodel_keys(
         i += 1
         
     # Set column headers
-    title_lst = modalities + model_name + ['Ground Truth']
+    title_lst = modalities + ref_modalities + model_name + ['Ground Truth']
     for ax, title in zip(axs[0], title_lst): 
         if title in ref_modalities:
             ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{ref}}$', fontsize=12,)
@@ -595,8 +706,8 @@ def viz_sample_multimodel_keys(
 def viz_sample_keys(
         sample_keys: pd.DataFrame, 
         dataset_root: Path, model_root: Path,
-        modalities=['S1RTC', 'S2RGB', 'DEM', 'LULC'],
-        tim_modalities=['S2RGB', 'DEM'],
+        modalities=['S1RTC', 'S2L2A', 'DEM', 'LULC'],
+        tim_modalities=['S2L2A', 'DEM'],
         ref_modalities=['LULC'],
         fig_scale=1,
         save_img=False,
@@ -604,7 +715,7 @@ def viz_sample_keys(
         ):
 
     nrows = len(sample_keys)
-    ncols = len(modalities) + 1 + 1  # the last one is for the ground truth
+    ncols = len(modalities) + len(tim_modalities) + len(ref_modalities) + 1 + 1  # the last one is for the ground truth
     fig, axs = plt.subplots(nrows=nrows, ncols=ncols, figsize=(fig_scale*ncols, fig_scale*nrows))
 
     i = 0
@@ -613,8 +724,9 @@ def viz_sample_keys(
         key = row['keys']
         water_in_risk = row['Water body in Flood Hazard (%)']
 
-        for j, m in enumerate(modalities):
-            
+        for j, m in enumerate(modalities + tim_modalities + ref_modalities):
+            if 'S2' in m:
+                m = 'S2RGB'
             store = zarr.storage.ZipStore(os.path.join(dataset_root, m, f"{key}.zarr.zip"), mode="r")
             ds = xr.open_zarr(store, consolidated=True)
             img, cmap, vmin, lulc_colors, lulc_labels = get_img(m, ds['bands'].values)
@@ -669,11 +781,11 @@ def viz_sample_keys(
         i += 1
         
     # Set column headers
-    title_lst = modalities + ['Prediction', 'Ground Truth']
+    title_lst = modalities + tim_modalities + ref_modalities + ['Prediction', 'Ground Truth']
     for ax, title in zip(axs[0], title_lst):
         if title in tim_modalities:
             if title == 'S2RGB': title = 'S2L2A'
-            ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{TiM}}$', fontsize=12,)
+            ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{gen}}$', fontsize=12,)
         elif title in ref_modalities:
             ax.set_title(r'$\mathrm{' + '('+ title +')' + r'_{ref}}$', fontsize=12,)
         else:
@@ -723,7 +835,7 @@ def viz_sample_keys(
         patches = [p for i, p in enumerate(patches) if lulc_labels[i] not in ['NoData', 'SnowIce', 'Clouds']]
         patches = hatch_patch + patches
         patches = patches[2:] + [patches[1]] + [patches[0]] # Reorder 
-        if 'LULC' not in modalities:
+        if 'LULC' not in modalities + tim_modalities + ref_modalities:
             patches = patches[-2:]
             y_anchor = -0.012 * 10 / nrows  # scale vertical offset
             ncol = len(patches)
@@ -821,7 +933,7 @@ def viz_tim_bar_plot(groups, metric, ylim=None, figsize=(5, 3), legend_true=True
             mlines.Line2D([], [], color='black', linestyle=':', linewidth=1.5, label=ref_label),
             mpatches.Patch(facecolor=groups[1][2], label='TerraMind-TiM'),
         ]
-        ax.legend(handles=legend_handles, fontsize=8)   
+        ax.legend(handles=legend_handles, fontsize=8, loc='lower right')   
 
     ax.grid(axis='y', linestyle='--', alpha=0.25)
     ax.set_ylim(ylim)
@@ -843,7 +955,8 @@ def resolve_log_path(path_like: str) -> Path:
         return path
     return path / "train.log-0"
 
-def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
+
+def parse_final_test_metrics_v2(log_path: Path) -> dict[str, dict[str, float]]:
     """Parse final [test] block after checkpoint loading."""
 
     CHECKPOINT_MARKER = "Loaded checkpoint__best for evaluation"
@@ -851,34 +964,32 @@ def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
     LOG_METRICS_TO_SHORT = {
         "IoU": "IoU",
         "F1-score": "F1",
-        "Precision": "Prec",
-        "Recall": "Recall",
+        "Recall": "Recall",         # Hit Rate
+        "Precision": "Prec",        # True Alarm
         "T_train": "T_train",
         "T_test": "T_test"
     }
 
-    text = log_path.read_text(encoding="utf-8", errors="replace")
-    lines = text.splitlines()
+    train_log_path = Path(log_path) / 'train.log-0'
+    train_text = train_log_path.read_text(encoding="utf-8", errors="replace")
+    train_lines = train_text.splitlines()
+
+    test_log_path = Path(log_path) / 'test.log-0'
+    test_text = test_log_path.read_text(encoding="utf-8", errors="replace")
+    test_lines = test_text.splitlines()
 
     marker_idx = -1
-    for idx, line in enumerate(lines):
+    for idx, line in enumerate(test_lines):
         if CHECKPOINT_MARKER in line:
             marker_idx = idx
-    if marker_idx == -1:
-        raise ValueError(f"Marker not found: {CHECKPOINT_MARKER}")
+    test_lines = test_lines[marker_idx:]
 
     metrics: dict[str, dict[str, float]] = {k: {} for k in LOG_METRICS_TO_SHORT.values()}
     current_metric: str | None = None
 
-    matches = re.findall(r'\d+:\d{2}:\d{2}', lines[marker_idx])
-    h, m, s = map(int, matches[-1].split(':'))
-    metrics["T_train"] = timedelta(hours=h, minutes=m, seconds=s)
-    for raw_line in lines[marker_idx + 1 :]:
-
-        matches = re.findall(r'\d+:\d{2}:\d{2}', raw_line)
-        if matches:
-            h, m, s = map(int, matches[-1].split(':'))
-            duration = timedelta(hours=h, minutes=m, seconds=s)
+    metrics["T_train"] = ''
+    metrics["T_test"] = ''
+    for raw_line in test_lines:
 
         line = strip_info_prefix(raw_line)
         if not line:
@@ -909,18 +1020,99 @@ def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
             class_name = class_match.group(1)
             score = float(class_match.group(2))
             metrics[current_metric][class_name] = score
-    
-    metrics["T_test"] = duration - metrics["T_train"]
 
     return metrics
 
-def build_row(run_name: str, parsed: dict[str, dict[str, float]]) -> dict[str, list[float]]:
+
+
+# def parse_final_test_metrics(log_path: Path) -> dict[str, dict[str, float]]:
+#     """Parse final [test] block after checkpoint loading."""
+
+#     CHECKPOINT_MARKER = "Loaded checkpoint__best for evaluation"
+
+#     LOG_METRICS_TO_SHORT = {
+#         "IoU": "IoU",
+#         "F1-score": "F1",
+#         "Precision": "Prec",
+#         "Recall": "Recall",
+#         "T_train": "T_train",
+#         "T_test": "T_test"
+#     }
+
+#     text = log_path.read_text(encoding="utf-8", errors="replace")
+#     lines = text.splitlines()
+
+#     marker_idx = -1
+#     for idx, line in enumerate(lines):
+#         if CHECKPOINT_MARKER in line:
+#             marker_idx = idx
+
+#     if marker_idx == -1:
+#         log_path = log_path.parent / "test.log-0"
+#         text = log_path.read_text(encoding="utf-8", errors="replace")
+#         lines = text.splitlines()
+
+#         marker_idx = -1
+#         for idx, line in enumerate(lines):
+#             if CHECKPOINT_MARKER in line:
+#                 marker_idx = idx
+#         if marker_idx == -1:
+#             raise ValueError(f"Marker not found: {CHECKPOINT_MARKER}")
+
+#     metrics: dict[str, dict[str, float]] = {k: {} for k in LOG_METRICS_TO_SHORT.values()}
+#     current_metric: str | None = None
+
+#     matches = re.findall(r'\d+:\d{2}:\d{2}', lines[marker_idx])
+#     h, m, s = map(int, matches[-1].split(':'))
+#     metrics["T_train"] = timedelta(hours=h, minutes=m, seconds=s)
+#     for raw_line in lines[marker_idx + 1 :]:
+
+#         matches = re.findall(r'\d+:\d{2}:\d{2}', raw_line)
+#         if matches:
+#             h, m, s = map(int, matches[-1].split(':'))
+#             duration = timedelta(hours=h, minutes=m, seconds=s)
+
+#         line = strip_info_prefix(raw_line)
+#         if not line:
+#             continue
+
+#         metric_match = re.search(r"\[test\]\s+-+\s+(.+?)\s+-+", line)
+#         if metric_match:
+#             long_name = metric_match.group(1).strip()
+#             current_metric = LOG_METRICS_TO_SHORT.get(long_name)
+#             continue
+
+#         if "Mean Accuracy:" in line:
+#             break
+
+#         if current_metric is None:
+#             continue
+
+#         mean_match = re.search(r"\[test\]\s+Mean\s+([0-9]+(?:\.[0-9]+)?)", line)
+#         if mean_match:
+#             metrics[current_metric]["mean"] = float(mean_match.group(1))
+#             continue
+
+#         if line.startswith("[test]"):
+#             continue
+
+#         class_match = re.match(r"([^\s]+)\s+([0-9]+(?:\.[0-9]+)?)$", line)
+#         if class_match:
+#             class_name = class_match.group(1)
+#             score = float(class_match.group(2))
+#             metrics[current_metric][class_name] = score
+    
+#     metrics["T_test"] = duration - metrics["T_train"]
+
+#     return metrics
+
+def build_row(parsed: dict[str, dict[str, float]]) -> dict[str, list[float]]:
 
     SELECTED_COLUMNS = [
         "IoU_mean",
         "F1_flood_rp10",
-        "Prec_flood_rp10",
-        "Recall_flood_rp10",
+        "Recall_flood_rp10",        # Hit Rate
+        "Prec_flood_rp10",          # True Alarm
     ]
 
     values: list[float] = []
@@ -931,6 +1123,7 @@ def build_row(run_name: str, parsed: dict[str, dict[str, float]]) -> dict[str, l
         metric, target = col.split("_", 1)
         value = parsed.get(metric, {}).get(target)
         values.append(round(value, 2) if value is not None else np.nan)
+        # print(f"{metric} {target} {value}")
     return values
 
 def calc_confusion_matrix(df: pd.DataFrame, split: str, print_summary=True, print_hist=True, figsize=(5,5)):
