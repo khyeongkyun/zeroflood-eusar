@@ -1,0 +1,136 @@
+INFO - 03/24/26 14:24:33 - 0:00:00 - ============ Initialized logger ============
+INFO - 03/24/26 14:24:33 - 0:00:00 - 'batch_size': 16,
+                                      'ckpt_dir': None,
+                                      'criterion': {'_target_': 'torch.nn.CrossEntropyLoss',
+                                                    'ignore_index': '${dataset.ignore_index}'},
+                                      'data_replicate': 1,
+                                      'dataset': {'_target_': 'pangaea.datasets.zeroflood.ZeroFlood',
+                                                  'auto_download': False,
+                                                  'bands': {'optical': ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7',
+                                                                        'B8', 'B8A', 'B9', 'B11', 'B12']},
+                                                  'classes': ['null', 'flood_rp10'],
+                                                  'constant_scale': 1,
+                                                  'data_max': {'optical': [18668, 25712, 23104, 21200, 18004, 19719,
+                                                                           17490, 18960, 17258, 16828, 16807,
+                                                                           16525]},
+                                                  'data_mean': {'optical': [716.30275126, 793.14589595, 959.25810479,
+                                                                            934.06415044, 1256.9637747,
+                                                                            1936.80935408, 2167.31130707,
+                                                                            2286.2040378, 2332.05653987,
+                                                                            2344.22551787, 1788.68863337,
+                                                                            1285.14083175]},
+                                                  'data_min': {'optical': [-998, -999, -999, -999, -999, -999, -999,
+                                                                           -999, -999, -995, -999, -999]},
+                                                  'data_std': {'optical': [757.69274298, 779.65635364, 777.1309713,
+                                                                           836.50367516, 877.741364, 1170.39447055,
+                                                                           1317.19570184, 1396.86405571,
+                                                                           1400.85616949, 1371.07279012,
+                                                                           1123.8796339, 921.63018983]},
+                                                  'dataset_name': 'ZeroFlood',
+                                                  'distribution': [0.66, 0.34],
+                                                  'download_url': 'None',
+                                                  'ignore_index': -1,
+                                                  'img_size': 264,
+                                                  'multi_modal': False,
+                                                  'multi_temporal': False,
+                                                  'num_classes': 2,
+                                                  'root_path': '/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/ZeroFlood'},
+                                      'decoder': {'_target_': 'pangaea.decoders.unet.UNet',
+                                                  'encoder': None,
+                                                  'finetune': '${finetune}',
+                                                  'num_classes': '${dataset.num_classes}'},
+                                      'encoder': {'_target_': 'pangaea.encoders.unet_encoder.UNet',
+                                                  'download_url': None,
+                                                  'encoder_weights': None,
+                                                  'input_bands': '${dataset.bands}',
+                                                  'input_size': '${dataset.img_size}',
+                                                  'output_dim': [64, 128, 256, 512],
+                                                  'topology': [64, 128, 256, 512]},
+                                      'finetune': True,
+                                      'limited_label_strategy': 'stratified',
+                                      'limited_label_train': 1,
+                                      'limited_label_val': 1,
+                                      'lr_scheduler': {'_target_': 'pangaea.utils.schedulers.MultiStepLR',
+                                                       'lr_milestones': [0.6, 0.9],
+                                                       'optimizer': None,
+                                                       'total_iters': None},
+                                      'num_workers': 4,
+                                      'optimizer': {'_target_': 'torch.optim.AdamW',
+                                                    'betas': [0.9, 0.999],
+                                                    'lr': 0.0001,
+                                                    'params': None,
+                                                    'weight_decay': 0.05},
+                                      'preprocessing': {'test': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                 'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'train': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                  'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.RandomCropToEncoder'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'val': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]}},
+                                      'save_eval_pred': False,
+                                      'seed': 234,
+                                      'stratification_bins': 3,
+                                      'task': {'evaluator': {'_target_': 'pangaea.engine.evaluator.SegEvaluator',
+                                                             'device': None,
+                                                             'exp_dir': None,
+                                                             'inference_mode': 'sliding',
+                                                             'sliding_inference_batch': 8,
+                                                             'use_wandb': '${use_wandb}',
+                                                             'val_loader': None},
+                                               'trainer': {'_target_': 'pangaea.engine.trainer.SegTrainer',
+                                                           'best_metric_key': 'mIoU',
+                                                           'ckpt_interval': 20,
+                                                           'criterion': None,
+                                                           'device': None,
+                                                           'eval_interval': 5,
+                                                           'evaluator': None,
+                                                           'exp_dir': None,
+                                                           'log_interval': 100,
+                                                           'lr_scheduler': None,
+                                                           'model': None,
+                                                           'n_epochs': 80,
+                                                           'optimizer': None,
+                                                           'precision': 'fp32',
+                                                           'train_loader': None,
+                                                           'use_wandb': '${use_wandb}'}},
+                                      'test_batch_size': 1,
+                                      'test_num_workers': 4,
+                                      'train': True,
+                                      'use_final_ckpt': False,
+                                      'use_wandb': False,
+                                      'wandb_run_id': None,
+                                      'work_dir': '/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/'
+INFO - 03/24/26 14:24:33 - 0:00:00 - The experiment is stored in /dss/dsstbyfs02/scratch/07/di54rur/zeroflood/models/zeroflood-baseline-unet/input-optical
+                                     
+INFO - 03/24/26 14:24:33 - 0:00:00 - Device used: cuda:0
+INFO - 03/24/26 14:24:33 - 0:00:00 - Built unet_encoder.
+INFO - 03/24/26 14:24:34 - 0:00:01 - Built UNet_SingleTemporal_SemanticSegmentation for with UNet encoder.
+INFO - 03/24/26 14:24:35 - 0:00:02 - Loaded checkpoint__best for evaluation
+INFO - 03/24/26 14:24:48 - 0:00:15 - [test] ------- IoU --------
+                                     null      	 88.434
+                                     flood_rp10	 75.422
+                                     [test]-------------------
+                                     [test] Mean	 81.928
+INFO - 03/24/26 14:24:48 - 0:00:15 - [test] ------- F1-score --------
+                                     null      	 93.862
+                                     flood_rp10	 85.989
+                                     [test]-------------------
+                                     [test] Mean	 89.926
+INFO - 03/24/26 14:24:48 - 0:00:15 - [test] ------- Precision --------
+                                     null      	 95.663
+                                     flood_rp10	 82.446
+                                     [test]-------------------
+                                     [test] Mean	 89.055
+INFO - 03/24/26 14:24:48 - 0:00:15 - [test] ------- Recall --------
+                                     null      	 92.128
+                                     flood_rp10	 89.851
+                                     [test]-------------------
+                                     [test] Mean	 90.989
+INFO - 03/24/26 14:24:48 - 0:00:15 - Mean Accuracy: 91.464 
+                                     

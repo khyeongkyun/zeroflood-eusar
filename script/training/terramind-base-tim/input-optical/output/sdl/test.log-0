@@ -1,0 +1,154 @@
+INFO - 03/30/26 17:07:32 - 0:00:00 - ============ Initialized logger ============
+INFO - 03/30/26 17:07:32 - 0:00:00 - 'batch_size': 16,
+                                      'ckpt_dir': None,
+                                      'criterion': {'_target_': 'torch.nn.CrossEntropyLoss',
+                                                    'ignore_index': '${dataset.ignore_index}'},
+                                      'data_replicate': 1,
+                                      'dataset': {'_target_': 'pangaea.datasets.zeroflood.ZeroFlood',
+                                                  'auto_download': False,
+                                                  'bands': {'optical': ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7',
+                                                                        'B8', 'B8A', 'B9', 'B11', 'B12']},
+                                                  'classes': ['null', 'flood_rp10'],
+                                                  'constant_scale': 1,
+                                                  'data_max': {'optical': [18668, 25712, 23104, 21200, 18004, 19719,
+                                                                           17490, 18960, 17258, 16828, 16807,
+                                                                           16525]},
+                                                  'data_mean': {'optical': [716.30275126, 793.14589595, 959.25810479,
+                                                                            934.06415044, 1256.9637747,
+                                                                            1936.80935408, 2167.31130707,
+                                                                            2286.2040378, 2332.05653987,
+                                                                            2344.22551787, 1788.68863337,
+                                                                            1285.14083175]},
+                                                  'data_min': {'optical': [-998, -999, -999, -999, -999, -999, -999,
+                                                                           -999, -999, -995, -999, -999]},
+                                                  'data_std': {'optical': [757.69274298, 779.65635364, 777.1309713,
+                                                                           836.50367516, 877.741364, 1170.39447055,
+                                                                           1317.19570184, 1396.86405571,
+                                                                           1400.85616949, 1371.07279012,
+                                                                           1123.8796339, 921.63018983]},
+                                                  'dataset_name': 'ZeroFlood',
+                                                  'distribution': [0.66, 0.34],
+                                                  'download_url': 'None',
+                                                  'ignore_index': -1,
+                                                  'img_size': 264,
+                                                  'multi_modal': False,
+                                                  'multi_temporal': False,
+                                                  'num_classes': 2,
+                                                  'root_path': '/dss/dsstbyfs02/scratch/07/di54rur/zeroflood/ZeroFlood'},
+                                      'decoder': {'_target_': 'pangaea.decoders.upernet.SegUPerNet',
+                                                  'channels': 512,
+                                                  'encoder': None,
+                                                  'finetune': '${finetune}',
+                                                  'num_classes': '${dataset.num_classes}'},
+                                      'encoder': {'_target_': 'pangaea.encoders.terramind_tim_encoder.terramind_v1_base_tim',
+                                                  'download_url': None,
+                                                  'encoder_weights': '/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/pretrained_models/TerraMind_v1_base.pt',
+                                                  'input_bands': {'optical': ['B1', 'B2', 'B3', 'B4', 'B5', 'B6',
+                                                                              'B7', 'B8', 'B8A', 'B9', 'B11',
+                                                                              'B12']},
+                                                  'input_size': 224,
+                                                  'merge_method': 'mean',
+                                                  'modalities': ['S2L2A'],
+                                                  'output_dim': 768,
+                                                  'output_layers': [2, 5, 8, 11],
+                                                  'patch_size': 16,
+                                                  'pretrained': True,
+                                                  'tim_chained_generations': True,
+                                                  'tim_modalities': ['S1RTC', 'DEM', 'LULC']},
+                                      'finetune': False,
+                                      'limited_label_strategy': 'stratified',
+                                      'limited_label_train': 1,
+                                      'limited_label_val': 1,
+                                      'lr_scheduler': {'_target_': 'pangaea.utils.schedulers.MultiStepLR',
+                                                       'lr_milestones': [0.6, 0.9],
+                                                       'optimizer': None,
+                                                       'total_iters': None},
+                                      'num_workers': 4,
+                                      'optimizer': {'_target_': 'torch.optim.AdamW',
+                                                    'betas': [0.9, 0.999],
+                                                    'lr': 0.0001,
+                                                    'params': None,
+                                                    'weight_decay': 0.05},
+                                      'preprocessing': {'test': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                 'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                      {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'train': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                  'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.RandomCropToEncoder'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                       {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]},
+                                                        'val': {'_target_': 'pangaea.engine.data_preprocessor.Preprocessor',
+                                                                'preprocessor_cfg': [{'_target_': 'pangaea.engine.data_preprocessor.BandFilter'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.NormalizeMeanStd'},
+                                                                                     {'_target_': 'pangaea.engine.data_preprocessor.BandPadding'}]}},
+                                      'save_eval_pred': False,
+                                      'seed': 234,
+                                      'stratification_bins': 3,
+                                      'task': {'evaluator': {'_target_': 'pangaea.engine.evaluator.SegEvaluator',
+                                                             'device': None,
+                                                             'exp_dir': None,
+                                                             'inference_mode': 'sliding',
+                                                             'sliding_inference_batch': 8,
+                                                             'use_wandb': '${use_wandb}',
+                                                             'val_loader': None},
+                                               'trainer': {'_target_': 'pangaea.engine.trainer.SegTrainer',
+                                                           'best_metric_key': 'mIoU',
+                                                           'ckpt_interval': 20,
+                                                           'criterion': None,
+                                                           'device': None,
+                                                           'eval_interval': 5,
+                                                           'evaluator': None,
+                                                           'exp_dir': None,
+                                                           'log_interval': 100,
+                                                           'lr_scheduler': None,
+                                                           'model': None,
+                                                           'n_epochs': 80,
+                                                           'optimizer': None,
+                                                           'precision': 'fp32',
+                                                           'train_loader': None,
+                                                           'use_wandb': '${use_wandb}'}},
+                                      'test_batch_size': 1,
+                                      'test_num_workers': 4,
+                                      'train': True,
+                                      'use_final_ckpt': False,
+                                      'use_wandb': False,
+                                      'wandb_run_id': None,
+                                      'work_dir': '/dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/'
+INFO - 03/30/26 17:07:32 - 0:00:00 - The experiment is stored in /dss/dsstbyfs02/scratch/07/di54rur/zeroflood/models/zeroflood-gfm-terramind-tim/input-optical/sdl
+                                     
+INFO - 03/30/26 17:07:32 - 0:00:00 - Device used: cuda:0
+INFO - 03/30/26 17:07:56 - 0:00:24 - TiM Tokenizer loaded : terramind_v1_tokenizer_s1rtc
+INFO - 03/30/26 17:07:58 - 0:00:26 - HTTP Request: HEAD https://huggingface.co/ibm-esa-geospatial/TerraMind-1.0-Tokenizer-DEM/resolve/main/TerraMind_Tokenizer_DEM.pt "HTTP/1.1 302 Found"
+INFO - 03/30/26 17:07:59 - 0:00:27 - TiM Tokenizer loaded : terramind_v1_tokenizer_dem
+INFO - 03/30/26 17:08:01 - 0:00:29 - HTTP Request: HEAD https://huggingface.co/ibm-esa-geospatial/TerraMind-1.0-Tokenizer-LULC/resolve/main/TerraMind_Tokenizer_LULC.pt "HTTP/1.1 302 Found"
+INFO - 03/30/26 17:08:02 - 0:00:30 - TiM Tokenizer loaded : terramind_v1_tokenizer_lulc
+WARNING - 03/30/26 17:08:04 - 0:00:32 - Missing keys in encoder_weights /dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/pretrained_models/TerraMind_v1_base.pt:
+                                        e.g. 2 samples / 1843 total. ['sampler.model.mask_token', 'sampler.model.encoder_embeddings.untok_sen2l2a@224.mod_emb']
+WARNING - 03/30/26 17:08:04 - 0:00:32 - Missing keys in encoder_weights /dss/dsstbyfs02/scratch/07/di54rur/pangaea-bench/pretrained_models/TerraMind_v1_base.pt:
+                                        e.g. 2 samples /252 total. ['mask_token', 'decoder_embeddings.coords.mod_emb']
+INFO - 03/30/26 17:08:04 - 0:00:32 - Built terramind.
+INFO - 03/30/26 17:08:06 - 0:00:33 - Built UPerNet for with TerraMindTiM encoder.
+INFO - 03/30/26 17:08:09 - 0:00:36 - Loaded checkpoint__best for evaluation
+INFO - 03/30/26 17:08:55 - 0:01:23 - [test] ------- IoU --------
+                                     null      	 89.871
+                                     flood_rp10	 78.922
+                                     [test]-------------------
+                                     [test] Mean	 84.396
+INFO - 03/30/26 17:08:55 - 0:01:23 - [test] ------- F1-score --------
+                                     null      	 94.665
+                                     flood_rp10	 88.219
+                                     [test]-------------------
+                                     [test] Mean	 91.442
+INFO - 03/30/26 17:08:55 - 0:01:23 - [test] ------- Precision --------
+                                     null      	 95.502
+                                     flood_rp10	 86.545
+                                     [test]-------------------
+                                     [test] Mean	 91.023
+INFO - 03/30/26 17:08:55 - 0:01:23 - [test] ------- Recall --------
+                                     null      	 93.843
+                                     flood_rp10	 89.959
+                                     [test]-------------------
+                                     [test] Mean	 91.901
+INFO - 03/30/26 17:08:55 - 0:01:23 - Mean Accuracy: 92.656 
+                                     
