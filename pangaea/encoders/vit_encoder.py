@@ -56,7 +56,17 @@ class VIT_Encoder(Encoder):
         )
 
         self.patch_size = patch_size
-        self.in_chans = len(input_bands["optical"])
+
+        # EDITTED: Support multi-modality
+        if "optical" in input_bands and "sar" in input_bands:
+            self.in_chans = len(input_bands["optical"]) + len(input_bands["sar"])
+        elif "optical" in input_bands:
+            self.in_chans = len(input_bands["optical"])
+        elif "sar" in input_bands:
+            self.in_chans = len(input_bands["sar"])
+        else:
+            raise ValueError("No valid bands found in the input_bands")
+
         self.patch_embed = PatchEmbed(
             input_size, patch_size, in_chans=self.in_chans, embed_dim=embed_dim
         )
@@ -82,7 +92,17 @@ class VIT_Encoder(Encoder):
         self.norm = norm_layer(embed_dim)
 
     def forward(self, images):
-        x = images["optical"].squeeze(2)
+        # EDITTED:
+        if "optical" in images and "sar" in images:
+            # Concatenate optical and sar bands
+            x = torch.cat([images["optical"].squeeze(2), images["sar"].squeeze(2)], dim=1)
+        elif "optical" in images:
+            x = images["optical"].squeeze(2)
+        elif "sar" in image:
+            x = images["sar"].squeeze(2)
+        else:
+            raise ValueError("No valid bands found in the image")
+        
         x = self.patch_embed(x)
 
         cls_tokens = self.cls_token.expand(

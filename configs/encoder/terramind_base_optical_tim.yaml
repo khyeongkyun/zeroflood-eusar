@@ -1,0 +1,38 @@
+_target_: pangaea.encoders.terramind_tim_encoder.terramind_v1_base_tim
+encoder_weights: /home/vmarsocci/pangaea-bench/pretrained_models/TerraMind_v1_base.pt
+download_url: null    # https://huggingface.co/ibm-esa-geospatial/TerraMind-1.0-base
+
+input_size: 224
+patch_size: 16
+merge_method: "mean"
+modalities: ["S2L2A"]
+
+input_bands:
+  optical:
+    - B1
+    - B2
+    - B3
+    - B4
+    - B5
+    - B6
+    - B7
+    - B8
+    - B8A
+    - B9
+    # - B10
+    - B11
+    - B12
+
+output_layers:
+  - 2     
+  - 5
+  - 8    
+  - 11    
+
+output_dim: 768
+
+# NOTE: ADDED for TiM -----------------------------------
+tim_modalities: ['S2L2A', 'LULC', 'DEM']
+pretrained: True
+tim_chained_generations: False
+# ------------------------------------------------------
