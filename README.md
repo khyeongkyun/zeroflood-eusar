@@ -6,9 +6,6 @@
 Updated
 - [2026-03-01] Paper was accepted at EUSAR 2026!
 
-Todo
-- [] Rerun: optical, optical-sar input band changed (Optical input band naming changed)
-
 ## Dataset
 
 Fine-tuning dataset is accessible via [HuggingFace](https://huggingface.co/datasets/khyeongkyun/ZeroFlood). Each modality in the split are zipped (e.g., `./train/S1RTC.zip`). Please unzip before using it.
@@ -49,11 +46,12 @@ Pangaea benckmark code runs fine-tuning and evaluation together. Here is an exam
 ```
 torchrun --nnodes=1 --nproc_per_node=1 pangaea/run.py \
    --config-name=train \
+   work_dir=/path/to/model/output \
    dataset=zeroflood_sar \
-   dataset.root_path=/path/to/zeroflood \
+   dataset.root_path=/path/to/zeroflood/dataset \
    encoder=terramind_base_sar_tim \
-   encoder.merge_method=mean \
-   encoder.encoder_weights=/path/to/terramind \
+   encoder.tim_chained_generations=True \
+   encoder.encoder_weights=/path/to/terramind/model \
    'encoder.tim_modalities=[S2L2A,LULC,DEM]' \
    decoder=seg_upernet \
    preprocessing=seg_default \
@@ -75,7 +73,7 @@ torchrun --nnodes=1 --nproc_per_node=1 pangaea/run.py \
 |       CROMA      | 83.63 |   79.72  | 87.95      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-croma) |
 |       DOFA       | 86.90 |   84.80  | 89.11      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-dofa) |
 |     TerraMind    | 88.36 |   86.77  | 90.02      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-terramind) |
-| TerraMind-TiM-sd | 89.50 |   88.98  | 90.03      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-terramind-tim) |
+| TerraMind-TiM-l | 89.12 |   88.45  | 89.80      | [link](https://huggingface.co/khyeongkyun/zeroflood-gfm-terramind-tim-sar-1/tree/main/l) |
 
 
 ### Inference
